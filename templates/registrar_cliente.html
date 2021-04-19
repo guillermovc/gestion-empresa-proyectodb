@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+    <h3>Registro de clientes</h3>
+
+    <p>Llene los campos del cliente para completar su registro</p>
+
+    <form action="/registrar_cliente" method="POST">
+        <label for="nombre">Nombre completo</label><br>
+        <input type="text" name="nombre" placeholder="Nombre completo" required><br>
+        <label for="direccion">Direccion</label><br>
+        <input type="text" name="direccion" placeholder="Dirección" required><br>
+        <label for="saldo">Saldo</label><br>
+        <input type="text" name="saldo" required><br>
+        <label for="descuento">Descuento</label><br>
+        <input type="text" name="descuento" required><br><br>
+        <input type="submit" value="Registrar cliente">
+    </form>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<h2>{{ header_title }}</h2>
+
+<h4>Llene los campos</h4>
+<span>o <a href="login">Ingresa a tu cuenta</a></span>
+
+<form action="registro" method="POST">
+    <input type="text" name="nombre" placeholder="Nombre completo" required><br>
+    <input type="text" name="user" placeholder="Nombre de usuario" required><br>
+    <input type="password" name="password" placeholder="Contraseña" required><br>
+    <input type="password" name="confirm_password" placeholder="Repita su contraseña" required><br>
+    <input type="submit" value="Ingresar">
+</form>
+
+
+{% endblock %}

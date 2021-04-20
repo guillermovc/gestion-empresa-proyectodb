@@ -37,14 +37,25 @@ def index() -> 'html':
         usuario = session['usuario']
 
         cur = mysql.connection.cursor()
+
+        # Consulta para obtener información de los clientes
         cur.execute('SELECT * FROM clientes')
         clientes = cur.fetchall()
-        
+
+        # Consulta para obtener información de los artículos
+
+
+        # Consulta para obtener información de las fábricas
+        cur.execute('SELECT * FROM fabricas')
+        fabricas = cur.fetchall()
+
+
     return render_template('index.html',
                         page_title='Proyecto',
                         header_title='Página principal',
                         usuario=usuario,
-                        clientes=clientes
+                        clientes=clientes,
+                        fabricas=fabricas
     )
 
 
@@ -125,15 +136,15 @@ def registrar_cliente() -> 'html':
         return redirect(url_for('index'))
 
 # """"""""""""""""""""""""""""" Ruta editar cliente """""""""""""""""""""""""""""
-@app.route('/editar_cliente/<id>')
-def editar_cliente(id):
+@app.route('/editar_cliente/<string:id>')
+def editar_cliente(id) -> 'html':
     cur = mysql.connection.cursor()
     cur.execute(f'SELECT * FROM clientes WHERE id = {id}')
     data = cur.fetchall()
 
     return render_template('editar_cliente.html', cliente = data[0])
 
-
+# """"""""""""""""""""""""""""" Ruta actualizar cliente """""""""""""""""""""""""""""
 @app.route('/actualizar_cliente/<id>', methods=['POST'])
 def actualizar_cliente(id):
     nombre = request.form['nombre']
@@ -158,7 +169,7 @@ def actualizar_cliente(id):
     flash('Los cambios se aplicaron correctamente.')
     return redirect(url_for('index'))
 
-# """"""""""""""""""""""""""""" Ruta ingresar cliente """""""""""""""""""""""""""""
+# """"""""""""""""""""""""""""" Ruta eliminar cliente """""""""""""""""""""""""""""
 @app.route('/eliminar_cliente/<string:id>')
 def eliminar_cliente(id):
     cur = mysql.connection.cursor()
@@ -166,6 +177,33 @@ def eliminar_cliente(id):
     mysql.connection.commit()
     flash('El cliente ha sido eliminado.')
     return redirect(url_for('index'))
+
+# """"""""""""""""""""""""""""" Ruta registrar fábrica """""""""""""""""""""""""""""
+@app.route('/registrar_fabrica', methods=['GET', 'POST'])
+def registrar_fabrica() -> 'html':
+    if 'usuario' in session:
+        if request.method == 'POST':            
+            nombre      = request.form['nombre']
+            telefono    = request.form['telefono']
+            direccion   = request.form['direccion']
+            ciudad      = request.form['ciudad']
+            alternativa = int(request.form['es_alternativa'])
+
+            cur = mysql.connection.cursor()
+            cur.execute("""
+            INSERT INTO fabricas
+            (nombre, telefono, direccion, ciudad, alternativa)
+            VALUES (%s, %s, %s, %s, %s)
+            """, (nombre, telefono, direccion, ciudad, alternativa))
+            mysql.connection.commit()
+
+            flash('Fábrica registrada correctamente.')
+
+        return render_template('registrar_fabrica.html')
+
+    else:
+        return redirect(url_for('index'))
+
 
 # ======================================= RUTAS =======================================
 

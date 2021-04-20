@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+    <h3>Registro de clientes</h3>
+
+    <p>Llene los campos para registrar una nueva fábrica</p>
+
+    <form action="/registrar_fabrica" method="POST">
+        <label for="nombre">Nombre de la fábrica</label><br>
+        <input type="text" name="nombre" id="nombre" placeholder="Ejemplo: Fábrica Norte" required><br>
+
+        <label for="telefono">Teléfono</label><br>
+        <input type="text" name="telefono" id="telefono" placeholder="Ejemplo: 6621647387" required><br>
+
+        <label for="direccion">Dirección</label><br>
+        <input type="text" name="direccion" id="direccion" placeholder="Incluya número y calle" required><br>
+
+        <label for="ciudad">Ciudad</label><br>
+        <input type="text" name="ciudad" id="ciudad" required><br><br>
+
+        <label for="no_alternativa">No alternativa</label>
+        <input type="radio" name="es_alternativa" id="no_alternativa" value="0" required><br>
+
+        <label for="alternativa">Alternativa</label>
+        <input type="radio" name="es_alternativa" id="alternativa" value="1" required><br>
+
+        <br>
+        <input type="submit" value="Registrar fábrica">
+    </form>
+
+{% endblock %}

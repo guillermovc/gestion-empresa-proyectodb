@@ -142,19 +142,24 @@ def registrar_cliente() -> 'html':
 @app.route('/registrar_articulo', methods=['GET', 'POST'])
 def registrar_articulo() -> 'html':
     if 'usuario' in session:
+        fabricas = None
         if request.method == 'POST':
             
             nombre = request.form['nombre']
             existencias = float(request.form['existencias'])
             descripcion = request.form['descripcion']
+            ID_fabrica = request.form['fabrica']
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO articulos (nombre, existencias, descripcion) VALUES (%s, %s, %s)',
-                        (nombre, existencias, descripcion))
+            cur.execute('INSERT INTO articulos (nombre, existencias, descripcion, fabrica_id) VALUES (%s, %s, %s, %s)',
+                        (nombre, existencias, descripcion, ID_fabrica))
             mysql.connection.commit()
-
             flash('Articulo registrado correctamente')
-
-        return render_template('registrar_articulo.html')
+            return render_template('registrar_articulo.html')
+        else:
+            cur = mysql.connection.cursor()
+            cur.execute('SELECT * FROM fabricas')
+            fabricas = cur.fetchall()
+            return render_template('registrar_articulo.html', fabricas=fabricas)
     else:
         return redirect(url_for('index'))
 
@@ -164,10 +169,9 @@ def editar_articulo(id):
     cur = mysql.connection.cursor()
     cur.execute(f'SELECT * FROM articulos WHERE id = {id}')
     data = cur.fetchall()
-
-    print(data[0][1])
-
-    return render_template('editar_articulo.html', articulo = data[0])
+    cur.execute(f'SELECT * FROM fabricas')
+    fabricas = cur.fetchall()
+    return render_template('editar_articulo.html', articulo = data[0], fabricas=fabricas)
 
 
 
@@ -176,15 +180,16 @@ def actualizar_articulo(id):
     nombre = request.form['nombre']
     existencias = float(request.form['existencias'])
     descripcion = request.form['descripcion']
-
+    ID_fabricas = request.form['fabrica']
     cur = mysql.connection.cursor()
     cur.execute("""
     UPDATE articulos 
     SET nombre = %s,
         existencias = %s,
-        descripcion = %s
+        descripcion = %s,
+        fabrica_id = %s
     WHERE id = %s
-    """, (nombre, existencias, descripcion, id))
+    """, (nombre, existencias, descripcion, ID_fabricas, id))
     mysql.connection.commit()
     flash('Los cambios se aplicaron correctamente.')
 

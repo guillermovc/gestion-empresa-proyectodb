@@ -18,6 +18,13 @@
     <label for="descripcion">descripcion</label><br>
     <input type="text" name="descripcion" required value="{{articulo.4}}"><br>
 
+    <label for="fabrica">fabrica</label><br>
+    <select name="fabrica"><br>
+        {% for fabrica in fabricas %}
+        <option value="{{ fabrica.0 }}">{{ fabrica.1 }}</option>
+        {% endfor %}
+    </select>
+    <br>
     <input type="submit" value="Actualizar artículo">
 </form>
 

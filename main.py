@@ -134,7 +134,10 @@ def registrar_cliente() -> 'html':
 
             flash('Cliente registrado correctamente')
 
-        return render_template('registrar_cliente.html')
+        usuario = session["usuario"]
+
+        return render_template('registrar_cliente.html',
+                                usuario=usuario,)
     else:
         return redirect(url_for('index'))
 

@@ -37,6 +37,7 @@ def index() -> 'html':
     fabricas = None
     if 'usuario' in session:
         usuario = session['usuario']
+        print(session)
 
         cur = mysql.connection.cursor()
 
@@ -85,6 +86,7 @@ def registro() -> 'html':
         # Creamos una sesión para que el usuario no tenga que hacer login
         # cuando acaba de registrarse
         session['usuario'] = username
+        session['nombre'] = nombre_completo
 
         # Redirigimos al index, que será diferente cuando hay una sesión activa
         return redirect(url_for('index'))
@@ -102,7 +104,30 @@ def login() -> 'html':
     if request.method == 'POST':
         session['usuario'] = request.form['user']
         return redirect(url_for('index'))
+        # username = request.form['user']
+        # password_ingresada = request.form['password']
 
+        # cur = mysql.connection.cursor()
+        # cur.execute(f'SELECT * FROM usuarios WHERE user = {username}')
+        # usuario = cur.fetchall()[0]
+
+        # password_usuario = usuario[3]
+        # nombre = usuario[1]
+
+        # print(usuario)
+
+        # # Verificamos que el usuario exista
+        # if username != None:
+        #     print(f'Es none')
+
+        # # Validamos la contraseña del usuario
+        # if password_ingresada == password_usuario:
+        #     session['usuario'] = username
+        #     session['nombre'] = nombre
+        #     return redirect(url_for('index'))
+        # else:
+        #     flash('Contraseña incorrecta')
+        #     return redirect(url_for('login'))
     else:
         return render_template('login.html',
                                 header_title='Ingreso de usuario',
@@ -169,6 +194,7 @@ def registrar_articulo() -> 'html':
 # """"""""""""""""""""""""""""" Ruta editar articulo """""""""""""""""""""""""""""
 @app.route('/editar_articulo/<string:id>')
 def editar_articulo(id):
+
     cur = mysql.connection.cursor()
     cur.execute(f'SELECT * FROM articulos WHERE id = {id}')
     data = cur.fetchall()
@@ -176,6 +202,15 @@ def editar_articulo(id):
     fabricas = cur.fetchall()
     return render_template('editar_articulo.html', articulo = data[0], fabricas=fabricas)
 
+    if 'usuario' in session:
+        cur = mysql.connection.cursor()
+        cur.execute(f'SELECT * FROM articulos WHERE id = {id}')
+        data = cur.fetchall()
+
+        return render_template('editar_articulo.html', articulo = data[0])
+    
+    else:
+        return redirect(url_for('index'))
 
 
 @app.route('/actualizar_articulo/<id>', methods=['POST'])
@@ -275,6 +310,14 @@ def registrar_fabrica() -> 'html':
     else:
         return redirect(url_for('index'))
 
+# """"""""""""""""""""""""""""" Ruta editar fábrica """""""""""""""""""""""""""""
+@app.route('/editar_fabrica/<string:id>')
+def editar_fabrica(id) -> 'html':
+    cur = mysql.connection.cursor()
+    cur.execute(f'SELECT * FROM fabricas WHERE id = {id}')
+    data = cur.fetchall()
+
+    return render_template('editar_cliente.html', cliente = data[0])
 
 # ======================================= RUTAS =======================================
 

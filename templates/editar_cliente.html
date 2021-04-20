@@ -4,7 +4,7 @@
 
 <h3>Editar información de un cliente</h3>
 
-<p>Cambie los campos que desea editar</p>
+<p>Modifique los campos que desea editar</p>
 
 <form action="/actualizar_cliente/{{cliente.0}}" method="POST">
     <label for="nombre">Nombre completo</label><br>
@@ -16,15 +16,15 @@
     value="{{cliente.2}}"><br>
 
     <label for="saldo">Saldo</label><br>
-    <input type="text" name="saldo" required value={{cliente.3}}><br>
+    <input type="text" name="saldo" required value="{{cliente.3}}"><br>
     
     <label for="saldo">Saldo límite</label><br>
-    <input type="text" name="saldo_limite" required value={{cliente.4}}><br>
+    <input type="text" name="saldo_limite" required value="{{cliente.4}}"><br>
 
     <label for="descuento">Descuento</label><br>
-    <input type="text" name="descuento" required value={{cliente.5}}><br><br>
+    <input type="text" name="descuento" required value="{{cliente.5}}"><br><br>
 
-    <input type="submit" value="Registrar cliente">
+    <input type="submit" value="Actualiza datos">
 </form>
 
 {% endblock %}

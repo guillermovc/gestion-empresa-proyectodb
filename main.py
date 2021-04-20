@@ -125,18 +125,16 @@ def registrar_cliente() -> 'html':
         return redirect(url_for('index'))
 
 # """"""""""""""""""""""""""""" Ruta editar cliente """""""""""""""""""""""""""""
-@app.route('/editar_cliente/<string:id>')
+@app.route('/editar_cliente/<id>')
 def editar_cliente(id):
     cur = mysql.connection.cursor()
     cur.execute(f'SELECT * FROM clientes WHERE id = {id}')
     data = cur.fetchall()
 
-    print(data[0][1])
-
     return render_template('editar_cliente.html', cliente = data[0])
 
 
-@app.route('/actualizar_cliente/<string:id>', methods=['POST'])
+@app.route('/actualizar_cliente/<id>', methods=['POST'])
 def actualizar_cliente(id):
     nombre = request.form['nombre']
     direccion = request.form['direccion']
@@ -155,8 +153,9 @@ def actualizar_cliente(id):
     WHERE id = %s
     """, (nombre, direccion, saldo, saldo_limite, descuento, id))
 
-    flash('Los cambios se aplicaron correctamente.')
+    mysql.connection.commit()
 
+    flash('Los cambios se aplicaron correctamente.')
     return redirect(url_for('index'))
 
 # """"""""""""""""""""""""""""" Ruta ingresar cliente """""""""""""""""""""""""""""

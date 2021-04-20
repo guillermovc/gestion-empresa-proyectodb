@@ -57,7 +57,7 @@ def index() -> 'html':
                         header_title='Página principal',
                         usuario=usuario,
                         clientes=clientes,
-                        articulos=articulos
+                        articulos=articulos,
                         fabricas=fabricas
     )
 

@@ -69,6 +69,26 @@
                 <td>Nombre</td>
                 <td>Existencias</td>
                 <td>Descripción</td>
+            </tr>
+        </thead>
+        <tbody>
+        
+                {% for articulo in articulos %}
+                <tr>
+                    <td>{{ articulo.0 }}</td>
+                    <td>{{ articulo.1 }}</td>
+                    <td>{{ articulo.2 }}</td>
+                    <td>{{ articulo.3 }}</td>
+                    <td>{{ articulo.4 }}</td>
+                    <td>
+                        <a href="/editar_articulo/{{articulo.0}}">Editar</a>
+                        <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 
     <!-------------------------- Tabla fábricas ----------------------------->
     <h4>Fábricas</h4>
@@ -84,16 +104,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for articulo in articulos %}
-                <tr>
-                    <td>{{ articulo.0 }}</td>
-                    <td>{{ articulo.1 }}</td>
-                    <td>{{ articulo.2 }}</td>
-                    <td>{{ articulo.3 }}</td>
-                    <td>{{ articulo.4 }}</td>
-                    <td>
-                        <a href="/editar_articulo/{{articulo.0}}">Editar</a>
-                        <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
+            
             {% for fabrica in fabricas %}
                 <tr>
                     <td>{{ fabrica.0 }}</td>

@@ -18,9 +18,11 @@
 
     <br>
     <a href="registrar_cliente">Registrar un nuevo cliente</a>
+    <br>
+    <a href="registrar_articulo">Registrar un nuevo articulo</a>
 
     <h4>Clientes actuales</h4>
-    <table>
+    <table class='table'>
         <thead>
             <tr>
                 <td>ID</td>
@@ -44,6 +46,35 @@
                     <td>
                         <a href="/editar_cliente/{{cliente.0}}">Editar</a>
                         <a href="/eliminar_cliente/{{cliente.0}}">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Articulos Registrados</h4>
+    <table class='table'>
+        <thead>
+            <tr>
+                <td>ID articulo</td>
+                <td>ID fabrica</td>
+                <td>Nombre</td>
+                <td>Existencias</td>
+                <td>Descripción</td>
+                <td>Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for articulo in articulos %}
+                <tr>
+                    <td>{{ articulo.0 }}</td>
+                    <td>{{ articulo.1 }}</td>
+                    <td>{{ articulo.2 }}</td>
+                    <td>{{ articulo.3 }}</td>
+                    <td>{{ articulo.4 }}</td>
+                    <td>
+                        <a href="/editar_articulo/{{articulo.0}}">Editar</a>
+                        <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}

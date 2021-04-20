@@ -33,18 +33,27 @@ def index() -> 'html':
 
     usuario = None
     clientes = None
+    articulos = None
     if 'usuario' in session:
         usuario = session['usuario']
 
         cur = mysql.connection.cursor()
         cur.execute('SELECT * FROM clientes')
         clientes = cur.fetchall()
+        cur.execute('SELECT * FROM articulos')
+        articulos = cur.fetchall()
+        
+
+
+
+
         
     return render_template('index.html',
                         page_title='Proyecto',
                         header_title='Página principal',
                         usuario=usuario,
-                        clientes=clientes
+                        clientes=clientes,
+                        articulos=articulos
     )
 
 
@@ -124,6 +133,67 @@ def registrar_cliente() -> 'html':
     else:
         return redirect(url_for('index'))
 
+# """"""""""""""""""""""""""""" Ruta registrar articulo """""""""""""""""""""""""""""
+@app.route('/registrar_articulo', methods=['GET', 'POST'])
+def registrar_articulo() -> 'html':
+    if 'usuario' in session:
+        if request.method == 'POST':
+            
+            nombre = request.form['nombre']
+            existencias = float(request.form['existencias'])
+            descripcion = request.form['descripcion']
+            cur = mysql.connection.cursor()
+            cur.execute('INSERT INTO articulos (nombre, existencias, descripcion) VALUES (%s, %s, %s)',
+                        (nombre, existencias, descripcion))
+            mysql.connection.commit()
+
+            flash('Articulo registrado correctamente')
+
+        return render_template('registrar_articulo.html')
+    else:
+        return redirect(url_for('index'))
+
+# """"""""""""""""""""""""""""" Ruta editar articulo """""""""""""""""""""""""""""
+@app.route('/editar_articulo/<string:id>')
+def editar_articulo(id):
+    cur = mysql.connection.cursor()
+    cur.execute(f'SELECT * FROM articulos WHERE id = {id}')
+    data = cur.fetchall()
+
+    print(data[0][1])
+
+    return render_template('editar_articulo.html', articulo = data[0])
+
+
+
+@app.route('/actualizar_articulo/<id>', methods=['POST'])
+def actualizar_articulo(id):
+    nombre = request.form['nombre']
+    existencias = float(request.form['existencias'])
+    descripcion = request.form['descripcion']
+
+    cur = mysql.connection.cursor()
+    cur.execute("""
+    UPDATE articulos 
+    SET nombre = %s,
+        existencias = %s,
+        descripcion = %s
+    WHERE id = %s
+    """, (nombre, existencias, descripcion, id))
+    mysql.connection.commit()
+    flash('Los cambios se aplicaron correctamente.')
+
+    return redirect(url_for('index'))
+
+# """"""""""""""""""""""""""""" Ruta eliminar articulo """""""""""""""""""""""""""""
+@app.route('/eliminar_articulo/<string:id>')
+def eliminar_articulo(id):
+    cur = mysql.connection.cursor()
+    cur.execute(f'DELETE FROM articulos WHERE id = {id}')
+    mysql.connection.commit()
+    flash('El cliente ha sido eliminado.')
+    return redirect(url_for('index'))
+
 # """"""""""""""""""""""""""""" Ruta editar cliente """""""""""""""""""""""""""""
 @app.route('/editar_cliente/<string:id>')
 def editar_cliente(id):
@@ -136,7 +206,8 @@ def editar_cliente(id):
     return render_template('editar_cliente.html', cliente = data[0])
 
 
-@app.route('/actualizar_cliente/<string:id>', methods=['POST'])
+
+@app.route('/actualizar_cliente/<id>', methods=['POST'])
 def actualizar_cliente(id):
     nombre = request.form['nombre']
     direccion = request.form['direccion']
@@ -154,12 +225,12 @@ def actualizar_cliente(id):
         descuento = %s
     WHERE id = %s
     """, (nombre, direccion, saldo, saldo_limite, descuento, id))
-
+    mysql.connection.commit()
     flash('Los cambios se aplicaron correctamente.')
 
     return redirect(url_for('index'))
 
-# """"""""""""""""""""""""""""" Ruta ingresar cliente """""""""""""""""""""""""""""
+# """"""""""""""""""""""""""""" Ruta eliminar cliente """""""""""""""""""""""""""""
 @app.route('/eliminar_cliente/<string:id>')
 def eliminar_cliente(id):
     cur = mysql.connection.cursor()

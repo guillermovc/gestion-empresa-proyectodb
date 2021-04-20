@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+    <h3>Registro de Articulos</h3>
+
+    <p>Llene los campos del Articulo para completar su registro</p>
+
+    <form action="/registrar_articulo" method="POST">
+        <label for="Nombre">Nombre del Articulo</label><br>
+        <input type="text" name="nombre" placeholder="Nombre del articulo" required><br>
+        <label for="Existencias">existencias</label><br>
+        <input type="text" name="existencias" placeholder="Existencias" required><br>
+        <label for="Descripción">descripcion</label><br>
+        <input type="text" name="descripcion"  required><br>
+        <input type="submit" value="Registrar articulo">
+    </form>
+
+{% endblock %}

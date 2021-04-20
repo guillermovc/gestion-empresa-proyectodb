@@ -21,6 +21,8 @@
 
     <br>
     <a href="registrar_cliente">Registrar un nuevo cliente</a>
+    <br>
+    <a href="registrar_articulo">Registrar un nuevo articulo</a>
 
     <br>
     <a href="registrar_fabrica">Registrar una nueva fábrica</a>
@@ -57,7 +59,18 @@
         </tbody>
     </table>
 
-    <!-- Tabla fábricas -->
+  <!-------------------------- Tabla articulos ----------------------------->
+    <h4>Articulos Registrados</h4>
+    <table class='table table-striped'>
+        <thead>
+            <tr>
+                <td>ID articulo</td>
+                <td>ID fabrica</td>
+                <td>Nombre</td>
+                <td>Existencias</td>
+                <td>Descripción</td>
+
+    <!-------------------------- Tabla fábricas ----------------------------->
     <h4>Fábricas</h4>
     <table class="table table-striped">
         <thead>
@@ -71,6 +84,16 @@
             </tr>
         </thead>
         <tbody>
+            {% for articulo in articulos %}
+                <tr>
+                    <td>{{ articulo.0 }}</td>
+                    <td>{{ articulo.1 }}</td>
+                    <td>{{ articulo.2 }}</td>
+                    <td>{{ articulo.3 }}</td>
+                    <td>{{ articulo.4 }}</td>
+                    <td>
+                        <a href="/editar_articulo/{{articulo.0}}">Editar</a>
+                        <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
             {% for fabrica in fabricas %}
                 <tr>
                     <td>{{ fabrica.0 }}</td>

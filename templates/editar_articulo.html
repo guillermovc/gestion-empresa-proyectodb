@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h3>Editar información de un articulo</h3>
+
+<p>Cambie los campos que desea editar</p>
+
+<form action="/actualizar_articulo/{{articulo.0}}" method="POST">
+    <label for="nombre">Nombre del articulo</label><br>
+    <input type="text" name="nombre" placeholder="Nombre del artículo" required
+    value="{{articulo.2}}"><br>
+
+    <label for="existencias">existencias</label><br>
+    <input type="text" name="existencias" placeholder="Existencias" required
+    value="{{articulo.3}}"><br>
+
+    <label for="descripcion">descripcion</label><br>
+    <input type="text" name="descripcion" required value="{{articulo.4}}"><br>
+
+    <input type="submit" value="Actualizar artículo">
+</form>
+
+{% endblock %}

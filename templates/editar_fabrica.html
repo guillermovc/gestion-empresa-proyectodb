@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h3>Editar información de una fábrica</h3>
+
+<p>Modifique los campos que desea editar</p>
+
+<form action="/actualizar_fabrica/{{fabrica.0}}" method="POST">
+    <label for="nombre">Nombre</label><br>
+    <input type="text" name="nombre" placeholder="Nombre de la fábrica" required
+    value="{{fabrica.1}}"><br>
+
+    <label for="telefono">Teléfono</label><br>
+    <input type="text" name="telefono" placeholder="Teléfono" required
+    value="{{fabrica.2}}"><br>
+
+    <label for="direccion">Dirección</label><br>
+    <input type="text" name="direccion" required value="{{fabrica.3}}"><br>
+    
+    <label for="ciudad">Ciudad</label><br>
+    <input type="text" name="ciudad" required value="{{fabrica.4}}"><br>
+
+    <label for="es_alternativa">Seleccione si la fábrica es alternativa o no</label><br>
+    <select name="es_alternativa" id="es_alternativa">
+        <option value="0">No alternativa</option>
+        <option value="1">Alternativa</option>
+    </select><br>
+
+    <br>
+    <input type="submit" value="Actualiza datos">
+</form>
+
+{% endblock %}

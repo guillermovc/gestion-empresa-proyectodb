@@ -69,17 +69,6 @@
                 <td>Nombre</td>
                 <td>Existencias</td>
                 <td>Descripción</td>
-
-    <!-------------------------- Tabla fábricas ----------------------------->
-    <h4>Fábricas</h4>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <td>ID</td>
-                <td>Nombre</td>
-                <td>Teléfono</td>
-                <td>Dirección</td>
-                <td>Ciudad</td>
                 <td>Opciones</td>
             </tr>
         </thead>
@@ -94,6 +83,25 @@
                     <td>
                         <a href="/editar_articulo/{{articulo.0}}">Editar</a>
                         <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
+                    </td>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-------------------------- Tabla fábricas ----------------------------->
+    <h4>Fábricas</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Nombre</td>
+                <td>Teléfono</td>
+                <td>Dirección</td>
+                <td>Ciudad</td>
+                <td>Opciones</td>
+            </tr>
+        </thead>           
+        <tbody>
             {% for fabrica in fabricas %}
                 <tr>
                     <td>{{ fabrica.0 }}</td>

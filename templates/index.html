@@ -5,7 +5,10 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-            <p>{{ message }}</p>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         {% endfor %}
     {% endif %}
 {% endwith %}
@@ -21,8 +24,12 @@
     <br>
     <a href="registrar_articulo">Registrar un nuevo articulo</a>
 
+    <br>
+    <a href="registrar_fabrica">Registrar una nueva fábrica</a>
+
+    <!-------------------------- Tabla clientes ----------------------------->
     <h4>Clientes actuales</h4>
-    <table class='table'>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <td>ID</td>
@@ -52,8 +59,9 @@
         </tbody>
     </table>
 
+  <!-------------------------- Tabla articulos ----------------------------->
     <h4>Articulos Registrados</h4>
-    <table class='table'>
+    <table class='table table-striped'>
         <thead>
             <tr>
                 <td>ID articulo</td>
@@ -61,6 +69,17 @@
                 <td>Nombre</td>
                 <td>Existencias</td>
                 <td>Descripción</td>
+
+    <!-------------------------- Tabla fábricas ----------------------------->
+    <h4>Fábricas</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Nombre</td>
+                <td>Teléfono</td>
+                <td>Dirección</td>
+                <td>Ciudad</td>
                 <td>Opciones</td>
             </tr>
         </thead>
@@ -75,6 +94,16 @@
                     <td>
                         <a href="/editar_articulo/{{articulo.0}}">Editar</a>
                         <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
+            {% for fabrica in fabricas %}
+                <tr>
+                    <td>{{ fabrica.0 }}</td>
+                    <td>{{ fabrica.1 }}</td>
+                    <td>{{ fabrica.2 }}</td>
+                    <td>{{ fabrica.3 }}</td>
+                    <td>{{ fabrica.4 }}</td>
+                    <td>
+                        <a href="/editar_fabrica/{{fabrica.0}}">Editar</a>
+                        <a href="/eliminar_fabrica/{{fabrica.0}}">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}

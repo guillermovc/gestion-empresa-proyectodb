@@ -5,7 +5,10 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-            <p>{{ message }}</p>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         {% endfor %}
     {% endif %}
 {% endwith %}
@@ -16,13 +19,17 @@
 
     <form action="/registrar_cliente" method="POST">
         <label for="nombre">Nombre completo</label><br>
-        <input type="text" name="nombre" placeholder="Nombre completo" required><br>
+        <input type="text" name="nombre" id="nombre" placeholder="Nombre completo" required><br>
+
         <label for="direccion">Direccion</label><br>
-        <input type="text" name="direccion" placeholder="Dirección" required><br>
+        <input type="text" name="direccion" id="direccion" placeholder="Dirección" required><br>
+
         <label for="saldo">Saldo</label><br>
-        <input type="text" name="saldo" required><br>
+        <input type="text" name="saldo" id="saldo" required><br>
+
         <label for="descuento">Descuento</label><br>
-        <input type="text" name="descuento" required><br><br>
+        <input type="text" name="descuento" id="descuento" required><br><br>
+
         <input type="submit" value="Registrar cliente">
     </form>
 

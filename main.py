@@ -18,8 +18,21 @@ semilla = bcrypt.gensalt()  # Generamos la semilla de encriptado
 app.secret_key = 'llave_secreta'
 
 # ===================================== FUNCIONES =====================================
+def encriptar(cadena, semilla) -> str:
+    cadena = cadena.encode('utf-8') # Convierte en bytes
+    encriptada = bcrypt.hashpw(cadena, semilla)
+    return encriptada
 
+def comparar_contraseñas(password, confirm_password):
+    if password != confirm_password:
+        print("Las password no coinciden")
+        flash("Las contraseñas no coinciden. Intentelo de nuevo.")
+        return redirect(url_for('registro'))
 
+def verificar_password_login(password_ingresada, password_base):
+    password_encriptado_encode = password_base.encode('utf-8')
+    password_encode = password_ingresada.encode('utf-8')
+    return bcrypt.checkpw(password_encode, password_encriptado_encode)
 # ===================================== FUNCIONES =====================================
 
 
@@ -68,17 +81,19 @@ def index() -> 'html':
 def registro() -> 'html':
 
     if request.method == 'POST':
+
         nombre_completo = request.form['nombre']
         username = request.form['user']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
-        if password != confirm_password:
-            print("Las password no coinciden")
+        comparar_contraseñas(password, confirm_password)
+
+        password_encriptada = encriptar(password, semilla)        
 
         cur = mysql.connection.cursor()
         cur.execute('INSERT INTO usuarios (nombre, user, password) VALUES (%s, %s, %s)',
-                    (nombre_completo, username, password))
+                    (nombre_completo, username, password_encriptada))
         mysql.connection.commit()
 
         flash('Se ha registrado correctamente')
@@ -92,6 +107,9 @@ def registro() -> 'html':
         return redirect(url_for('index'))
 
     else:
+        if 'usuario' in session:
+            return redirect(url_for('index'))
+
         return render_template('registro.html',
                                 header_title='Registro de usuario',
                                 page_title='Registro',
@@ -101,33 +119,38 @@ def registro() -> 'html':
 @app.route('/login', methods=['GET', 'POST'])
 def login() -> 'html':
     
-    if request.method == 'POST':
-        session['usuario'] = request.form['user']
+    # Verificar si es que ya existe una sesion activa
+    if 'usuario' in session:
         return redirect(url_for('index'))
-        # username = request.form['user']
-        # password_ingresada = request.form['password']
 
-        # cur = mysql.connection.cursor()
-        # cur.execute(f'SELECT * FROM usuarios WHERE user = {username}')
-        # usuario = cur.fetchall()[0]
+    # Verificar si se ha enviado un formulario
+    if request.method == 'POST':
+        username = request.form['user']
+        password_ingresada = request.form['password']
 
-        # password_usuario = usuario[3]
-        # nombre = usuario[1]
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM usuarios WHERE user = %s', [username])
 
-        # print(usuario)
+        # Verificar que el usuario exista
+        data = cur.fetchall()
 
-        # # Verificamos que el usuario exista
-        # if username != None:
-        #     print(f'Es none')
+        if len(data) != 0:
+            usuario = data[0]
+            password_base = usuario[3]
+            nombre = usuario[1]
 
-        # # Validamos la contraseña del usuario
-        # if password_ingresada == password_usuario:
-        #     session['usuario'] = username
-        #     session['nombre'] = nombre
-        #     return redirect(url_for('index'))
-        # else:
-        #     flash('Contraseña incorrecta')
-        #     return redirect(url_for('login'))
+            # Verificar que las contraseñas coincidan
+            if verificar_password_login(password_ingresada, password_base):
+                session['usuario'] = username
+                session['nombre'] = nombre
+                return redirect(url_for('index'))
+            else:
+                flash('La contraseña es incorrecta.')
+                return render_template('login.html')
+
+        else:
+            flash('El usuario no existe')
+            return render_template('login.html')
     else:
         return render_template('login.html',
                                 header_title='Ingreso de usuario',
@@ -317,7 +340,30 @@ def editar_fabrica(id) -> 'html':
     cur.execute(f'SELECT * FROM fabricas WHERE id = {id}')
     data = cur.fetchall()
 
-    return render_template('editar_cliente.html', cliente = data[0])
+    return render_template('editar_fabrica.html', fabrica = data[0])
+
+# """"""""""""""""""""""""""""" Ruta actualizar fabrica """""""""""""""""""""""""""""
+@app.route('/actualizar_fabrica/<id>', methods=['POST'])
+def actualizar_fabrica(id):
+    nombre = request.form['nombre']
+    telefono = request.form['telefono']
+    direccion = request.form['direccion']
+    ciudad = request.form['ciudad']
+    es_alternativa = int(request.form['es_alternativa'])
+
+    cur = mysql.connection.cursor()
+    cur.execute("""
+    UPDATE fabricas 
+    SET nombre = %s,
+        telefono = %s,
+        direccion = %s,
+        ciudad = %s,
+        alternativa = %s
+    WHERE id = %s
+    """, (nombre, telefono, direccion, ciudad, es_alternativa, id))
+    mysql.connection.commit()
+    flash('Los cambios se aplicaron correctamente.')
+    return redirect(url_for('index'))
 
 # ======================================= RUTAS =======================================
 

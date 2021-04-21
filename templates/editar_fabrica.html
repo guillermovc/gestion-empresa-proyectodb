@@ -23,8 +23,16 @@
 
     <label for="es_alternativa">Seleccione si la fábrica es alternativa o no</label><br>
     <select name="es_alternativa" id="es_alternativa">
-        <option value="0">No alternativa</option>
-        <option value="1">Alternativa</option>
+        <option value="0"
+        {% if fabrica.5 == 0  %}
+            selected
+        {% endif %}
+        >No alternativa</option>
+        <option value="1"
+        {% if fabrica.5 == 1  %}
+            selected
+        {% endif %}
+        >Alternativa</option>
     </select><br>
 
     <br>

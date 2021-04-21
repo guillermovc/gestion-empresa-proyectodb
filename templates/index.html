@@ -2,30 +2,11 @@
 
 {% block body %}
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+
 
 <h1>{{ header_title }}</h1>
 
 {% if usuario %}
-    <!---<h2>Sesion iniciada como {{ usuario }}</h2>
-    <a href="logout">Cerrar sesión</a>
-
-    <br>
-    <a href="registrar_cliente">Registrar un nuevo cliente</a>
-    <br>
-    <a href="registrar_articulo">Registrar un nuevo articulo</a>
-
-    <br>
-    <a href="registrar_fabrica">Registrar una nueva fábrica</a>--->
 
     <!-------------------------- Tabla clientes ----------------------------->
     <h4>Clientes actuales</h4>
@@ -101,6 +82,7 @@
                 <td>Teléfono</td>
                 <td>Dirección</td>
                 <td>Ciudad</td>
+                <td>Alternativa</td>
                 <td>Opciones</td>
             </tr>
         </thead>           
@@ -112,6 +94,13 @@
                     <td>{{ fabrica.2 }}</td>
                     <td>{{ fabrica.3 }}</td>
                     <td>{{ fabrica.4 }}</td>
+                    <td>
+                        {% if fabrica.5 == 0 %}
+                            No
+                        {% else %}
+                            Si
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="/editar_fabrica/{{fabrica.0}}">Editar</a>
                         <a href="/eliminar_fabrica/{{fabrica.0}}">Eliminar</a>
@@ -129,6 +118,17 @@
 
     <h4>Ingrese sus datos</h4>
 
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    
     <form action="login" method="POST">
         <input type="text" name="user" placeholder="Nombre de usuario" required ><br>
         <input type="password" name="password" placeholder="Contraseña" required ><br>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+<h3>Registro de Pedidos</h3>
+
+<p>Elija los articulos, la cantidad y el cliente para realizar un pedido</p>
+
+<form action="/registrar_pedido" method="POST">
+    
+    <div class="row">
+
+    {% for articulo in articulos %}
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header"><h5 class="card-title">{{ articulo.2 }}</h5></div>
+                <div class="card-body">
+                    <p class="card-text">Precio: ${{ articulo.3 }}</p>
+                    <p class="card-text">Existencias: {{articulo.4}}</p>
+                    <p class="card-text">{{articulo.5}}</p>
+                    <label for="cantidad_articulo_{{articulo.0}}">Cantidad</label>
+                    <input type="number" name="cantidad_articulo_{{articulo.0}}" id="cantidad_articulo_{{articulo.0}}" value=0>
+                    <br><br>
+                    <label for="articulo_{{articulo.0}}">Comprar</label>
+                    <input type="checkbox" id="articulo_{{articulo.0}}" name="articulo_{{articulo.0}}" name="articulo_{{articulo.0}}"
+                    value="comprar_articulo_{{articulo.0}}">
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    </div>   
+
+    <label for="nombre">Nombre del cliente:</label> <br>
+    <input type="text" name="nombre_cliente" id="nombre_cliente" required>
+
+    <br><br>
+    <input type="submit" value="Realizar compra">
+</form>
+
+{% endblock %}

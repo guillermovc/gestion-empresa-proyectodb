@@ -6,6 +6,17 @@
 
 <h1>{{ header_title }}</h1>
 
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 {% if usuario %}
 
     <!-------------------------- Tabla clientes ----------------------------->
@@ -33,7 +44,7 @@
                     <td>{{ cliente.5 }}</td>
                     <td>
                         <a href="/editar_cliente/{{cliente.0}}">Editar</a>
-                        <a href="/eliminar_cliente/{{cliente.0}}">Eliminar</a>
+                        <a href="/eliminar_cliente/{{cliente.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -48,6 +59,7 @@
                 <td>ID articulo</td>
                 <td>ID fabrica</td>
                 <td>Nombre</td>
+                <td>Precio</td>
                 <td>Existencias</td>
                 <td>Descripción</td>
                 <td>Opciones</td>
@@ -59,12 +71,13 @@
                     <td>{{ articulo.0 }}</td>
                     <td>{{ articulo.1 }}</td>
                     <td>{{ articulo.2 }}</td>
-                    <td>{{ articulo.3 }}</td>
+                    <td>${{ articulo.3 }}</td>
                     <td>{{ articulo.4 }}</td>
+                    <td>{{ articulo.5 }}</td>
 
                     <td>
                         <a href="/editar_articulo/{{articulo.0}}">Editar</a>
-                        <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
+                        <a href="/eliminar_articulo/{{articulo.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -103,7 +116,7 @@
                     </td>
                     <td>
                         <a href="/editar_fabrica/{{fabrica.0}}">Editar</a>
-                        <a href="/eliminar_fabrica/{{fabrica.0}}">Eliminar</a>
+                        <a href="/eliminar_fabrica/{{fabrica.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -117,17 +130,6 @@
     <a href="registro">registrarse</a>
 
     <h4>Ingrese sus datos</h4>
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
     
     <form action="login" method="POST">
         <input type="text" name="user" placeholder="Nombre de usuario" required ><br>

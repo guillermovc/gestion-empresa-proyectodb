@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 20-04-2021 a las 08:59:04
--- Versión del servidor: 10.4.18-MariaDB
--- Versión de PHP: 8.0.3
+-- Host: 127.0.0.1
+-- Generation Time: Apr 22, 2021 at 07:50 PM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 8.0.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,34 +18,37 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `proyecto_db`
+-- Database: `proyecto_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `articulos`
+-- Table structure for table `articulos`
 --
 
 CREATE TABLE `articulos` (
   `id` int(11) NOT NULL,
   `fabrica_id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `precio` float NOT NULL,
   `existencias` int(11) NOT NULL,
   `descripcion` varchar(200) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Volcado de datos para la tabla `articulos`
+-- Dumping data for table `articulos`
 --
 
-INSERT INTO `articulos` (`id`, `fabrica_id`, `nombre`, `existencias`, `descripcion`) VALUES
-(10, 2, 'gorra', 2, 'azul ');
+INSERT INTO `articulos` (`id`, `fabrica_id`, `nombre`, `precio`, `existencias`, `descripcion`) VALUES
+(1, 1, 'Bicicleta Chila', 2499.99, 9, 'Bicicleta roja de velocidades'),
+(3, 1, 'Camiseta con estampado', 170, 20, 'Todas las tallas. Colores: verde, rojo, blanco y azul.'),
+(4, 1, 'Short Playero', 250, 15, 'Increible short playero para disfrutar tus vacaciones.');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clientes`
+-- Table structure for table `clientes`
 --
 
 CREATE TABLE `clientes` (
@@ -58,64 +61,68 @@ CREATE TABLE `clientes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Volcado de datos para la tabla `clientes`
+-- Dumping data for table `clientes`
 --
 
 INSERT INTO `clientes` (`id`, `nombre_completo`, `direccion`, `saldo`, `limite_saldo`, `descuento`) VALUES
-(6, 'Juan Hernandez Cota', 'Calle 19 ave 1 y 2 Col. La Cantera', 1000, 300000, 50);
+(1, 'Juan Perez', 'Avenida Máquina #501 Col. Nacozari', 5381.05, 300000, 60),
+(3, 'María Félix', 'Calle Alamos #1914 Col. Sonora', 3200, 300000, 700);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `detalle_pedidos`
+-- Table structure for table `detalle_pedidos`
 --
 
 CREATE TABLE `detalle_pedidos` (
   `id` int(11) NOT NULL,
   `pedido_id` int(11) NOT NULL,
   `articulo_id` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL
+  `cantidad` int(11) NOT NULL,
+  `total` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `fabricas`
+-- Table structure for table `fabricas`
 --
 
 CREATE TABLE `fabricas` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `telefono` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `direccion` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `direccion` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `ciudad` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `alternativa` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Volcado de datos para la tabla `fabricas`
+-- Dumping data for table `fabricas`
 --
 
 INSERT INTO `fabricas` (`id`, `nombre`, `telefono`, `direccion`, `ciudad`, `alternativa`) VALUES
-(1, 'Fabrica 1', '6221234567', 'Avenida Valedor', 'Obson', 1),
-(2, 'Fabrica de sonora', '6221233211', 'calle guaymas', 'hermosillo', 0);
+(1, 'Fábrica Sur', '5522781757', 'Calle Revolución #114', 'Mallorca', 0),
+(2, 'Fábrica Guaymas', '5573783832', 'Avenida pescado', 'Guaymas', 0),
+(3, 'Fábrica El Chapo', '553237282', 'Calle Insurgentes #22', 'Culiacan', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pedidos`
+-- Table structure for table `pedidos`
 --
 
 CREATE TABLE `pedidos` (
   `id` int(10) NOT NULL,
   `cliente_id` int(11) NOT NULL,
-  `fecha` date NOT NULL
+  `fecha` date NOT NULL,
+  `entrega` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios`
+-- Table structure for table `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -126,92 +133,92 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Volcado de datos para la tabla `usuarios`
+-- Dumping data for table `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nombre`, `user`, `password`) VALUES
-(4, 'Guillermo Velazquez', 'guille', '123'),
-(5, 'usuario2', 'usuario2', '123');
+(6, 'Usuario Encriptado', 'encriptado1', '$2b$12$DUk64CdmNJZSjcNOxklEleuItJdGIzSXxRgb/dju0bRIA9kwFn/mC'),
+(7, 'Guillermo Velazquez', 'guille', '$2b$12$VxmNx9UVtyu53Yx8mjlELu2TNXuROhZqSDG8OeZEZKU8/kDjFmwy6');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `articulos`
+-- Indexes for table `articulos`
 --
 ALTER TABLE `articulos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `clientes`
+-- Indexes for table `clientes`
 --
 ALTER TABLE `clientes`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `detalle_pedidos`
+-- Indexes for table `detalle_pedidos`
 --
 ALTER TABLE `detalle_pedidos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `fabricas`
+-- Indexes for table `fabricas`
 --
 ALTER TABLE `fabricas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `pedidos`
+-- Indexes for table `pedidos`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `usuarios`
+-- Indexes for table `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `articulos`
+-- AUTO_INCREMENT for table `articulos`
 --
 ALTER TABLE `articulos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `clientes`
+-- AUTO_INCREMENT for table `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT de la tabla `detalle_pedidos`
+-- AUTO_INCREMENT for table `detalle_pedidos`
 --
 ALTER TABLE `detalle_pedidos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `fabricas`
+-- AUTO_INCREMENT for table `fabricas`
 --
 ALTER TABLE `fabricas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `pedidos`
+-- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `usuarios`
+-- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

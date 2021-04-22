@@ -48,8 +48,10 @@ def index() -> 'html':
     clientes = None
     articulos = None
     fabricas = None
+    nombre = None
     if 'usuario' in session:
         usuario = session['usuario']
+        nombre = session['nombre']
         print(session)
 
         cur = mysql.connection.cursor()
@@ -69,7 +71,7 @@ def index() -> 'html':
     return render_template('index.html',
                         page_title='Proyecto',
                         header_title='Página principal',
-                        usuario=usuario,
+                        usuario=nombre,
                         clientes=clientes,
                         articulos=articulos,
                         fabricas=fabricas
@@ -197,12 +199,13 @@ def registrar_articulo() -> 'html':
         if request.method == 'POST':
             
             nombre = request.form['nombre']
+            precio = float(request.form['precio'])
             existencias = float(request.form['existencias'])
             descripcion = request.form['descripcion']
             ID_fabrica = request.form['fabrica']
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO articulos (nombre, existencias, descripcion, fabrica_id) VALUES (%s, %s, %s, %s)',
-                        (nombre, existencias, descripcion, ID_fabrica))
+            cur.execute('INSERT INTO articulos (nombre, precio, existencias, descripcion, fabrica_id) VALUES (%s, %s, %s, %s)',
+                        (nombre, precio, existencias, descripcion, ID_fabrica))
             mysql.connection.commit()
             flash('Articulo registrado correctamente')
             return render_template('registrar_articulo.html')
@@ -239,18 +242,20 @@ def editar_articulo(id):
 @app.route('/actualizar_articulo/<id>', methods=['POST'])
 def actualizar_articulo(id):
     nombre = request.form['nombre']
+    precio = float(request.form['precio'])
     existencias = float(request.form['existencias'])
     descripcion = request.form['descripcion']
-    ID_fabricas = request.form['fabrica']
+    ID_fabrica = request.form['fabrica']
     cur = mysql.connection.cursor()
     cur.execute("""
     UPDATE articulos 
     SET nombre = %s,
+        precio = %s,
         existencias = %s,
         descripcion = %s,
         fabrica_id = %s
     WHERE id = %s
-    """, (nombre, existencias, descripcion, ID_fabricas, id))
+    """, (nombre, precio, existencias, descripcion, ID_fabrica, id))
     mysql.connection.commit()
     flash('Los cambios se aplicaron correctamente.')
 
@@ -364,6 +369,36 @@ def actualizar_fabrica(id):
     mysql.connection.commit()
     flash('Los cambios se aplicaron correctamente.')
     return redirect(url_for('index'))
+
+# """"""""""""""""""""""""""""" Ruta registrar pedido """""""""""""""""""""""""""""
+@app.route('/registrar_pedido', methods=['GET', 'POST'])
+def registrar_pedido() -> 'html':
+    if 'usuario' in session:
+
+        if request.method == 'POST':
+            print(f'El request:{request.form}')
+            print(f'Longitud del dict: {len(request.form)}')
+            print(f'El dict hecho lista: {list(request.form)}')
+
+            # El último elemento del diccionario es el nombre del usuario
+            # Así que todos los anteriores serán los artículos que eligió
+            llaves_articulos = list(request.form)[:-1]
+            print(f'Las llaves son: {llaves_articulos}')
+            for llave in llaves_articulos:
+                print(f'Llamando al diccionario request: {request.form[llave]}')
+
+        elif request.method == 'GET':
+            # Obtenemos todos los articulos de la base
+            cur = mysql.connection.cursor()
+            cur.execute('SELECT * FROM articulos')
+            articulos = cur.fetchall()
+            cur.close()
+
+            return render_template('registrar_pedido.html', articulos=articulos)
+    
+        
+    else:
+        return redirect(url_for('index'))
 
 # ======================================= RUTAS =======================================
 

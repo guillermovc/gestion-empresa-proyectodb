@@ -30,7 +30,7 @@
                     <label for="cantidad_articulo_{{articulo.0}}">Cantidad</label>
                     <input type="number" name="cantidad_articulo_{{articulo.0}}" id="cantidad_articulo_{{articulo.0}}" value=0>
                     <br><br>
-                    <label for="articulo_{{articulo.0}}">Comprar</label>
+                    <label for="articulo_{{articulo.0}}">Agregar</label>
                     <input type="checkbox" id="articulo_{{articulo.0}}" name="articulo_{{articulo.0}}" name="articulo_{{articulo.0}}"
                     value="comprar_articulo_{{articulo.0}}">
                 </div>
@@ -40,11 +40,23 @@
 
     </div>   
 
-    <label for="nombre">Nombre del cliente:</label> <br>
-    <input type="text" name="nombre_cliente" id="nombre_cliente" required>
+    <label for="cliente">Cliente</label><br>
+    <select name="cliente" id="cliente">
+        {% for cliente in clientes %}
+            <option value="{{ cliente.0 }}">
+                {{ cliente.0 }} | 
+                {{ cliente.1 }} | 
+                {{ cliente.2 }}
+            </option>
+        {% endfor %}
+    </select>
 
     <br><br>
-    <input type="submit" value="Realizar compra">
+    <label for="fecha_entrega">Fecha de entrega</label><br>
+    <input type="date" id="fecha_entrega" name="fecha_entrega" required>
+
+    <br><br>
+    <input type="submit" value="Realizar pedido">
 </form>
 
 {% endblock %}

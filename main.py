@@ -33,6 +33,14 @@ def verificar_password_login(password_ingresada, password_base):
     password_encriptado_encode = password_base.encode('utf-8')
     password_encode = password_ingresada.encode('utf-8')
     return bcrypt.checkpw(password_encode, password_encriptado_encode)
+
+def obtener_articulos_validos(lista_articulos):
+    articulos = []
+    for articulo in lista_articulos:
+        if int(articulo[1]) > 0:
+            articulos.append(articulo)
+        
+    return articulos
 # ===================================== FUNCIONES =====================================
 
 
@@ -52,7 +60,6 @@ def index() -> 'html':
     if 'usuario' in session:
         usuario = session['usuario']
         nombre = session['nombre']
-        print(session)
 
         cur = mysql.connection.cursor()
 
@@ -375,26 +382,74 @@ def actualizar_fabrica(id):
 def registrar_pedido() -> 'html':
     if 'usuario' in session:
 
-        if request.method == 'POST':
-            print(f'El request:{request.form}')
-            print(f'Longitud del dict: {len(request.form)}')
-            print(f'El dict hecho lista: {list(request.form)}')
+        cur = mysql.connection.cursor()
 
-            # El último elemento del diccionario es el nombre del usuario
-            # Así que todos los anteriores serán los artículos que eligió
-            llaves_articulos = list(request.form)[:-1]
-            print(f'Las llaves son: {llaves_articulos}')
-            for llave in llaves_articulos:
-                print(f'Llamando al diccionario request: {request.form[llave]}')
+        if request.method == 'POST':
+
+            print(f'El dict: {request.form}')
+            request_list = list(request.form.items())
+            articulos_pedidos = obtener_articulos_validos(request_list[:-2])
+            cliente_id = int(request.form['cliente'])
+            fecha_entrega = request.form['fecha_entrega']
+
+            print(f'Articulos: {articulos_pedidos}')
+            print(f'Cliente id: {cliente_id}')
+
+            total_cuenta = 0
+            
+            cur.execute("""INSERT INTO pedidos 
+                        (cliente_id, total, entrega) 
+                        VALUES (%s, %s, %s) """,
+                        (cliente_id, 0, fecha_entrega))
+            mysql.connection.commit()
+
+            for articulo in articulos_pedidos:
+                id_articulo = int(articulo[0].split('_')[-1])
+                cantidad = int(articulo[1])
+                cur.execute('SELECT precio FROM articulos WHERE id = %s', [id_articulo])
+                precio = cur.fetchall()[0][0]
+                print(f'Precio del articulo {id_articulo}: {precio}, cantidad:{cantidad}')
+
+                acumulado = cantidad * precio
+                print(f'Acumulado: {type(acumulado)}')
+
+                print(f'Se agrega a la cuenta: {acumulado}')
+                
+                cur.execute('SELECT MAX(id) FROM pedidos')
+                ultimo_pedido_id = int(cur.fetchall()[0][0])
+                print(f'Id del ultimo pedido: {ultimo_pedido_id}')               
+
+                cur.execute("""INSERT INTO detalle_pedidos 
+                            (pedido_id, articulo_id, cantidad, total) 
+                            VALUES (%s, %s, %s, %s)""",
+                            (ultimo_pedido_id, id_articulo, cantidad, acumulado))
+                mysql.connection.commit()
+
+                total_cuenta += acumulado
+
+            cur.execute("""
+                        UPDATE pedidos
+                        SET total = %s
+                        WHERE id = %s
+                        """, (total_cuenta, ultimo_pedido_id))
+            mysql.connection.commit()
+            flash('Se realizó el pedido con exito')
+
+            return redirect(url_for('index'))
 
         elif request.method == 'GET':
             # Obtenemos todos los articulos de la base
-            cur = mysql.connection.cursor()
             cur.execute('SELECT * FROM articulos')
             articulos = cur.fetchall()
+
+            cur.execute('SELECT * FROM clientes')
+            clientes = cur.fetchall()
+
             cur.close()
 
-            return render_template('registrar_pedido.html', articulos=articulos)
+            return render_template('registrar_pedido.html',
+                                    articulos=articulos,
+                                    clientes=clientes)
     
         
     else:

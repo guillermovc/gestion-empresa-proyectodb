@@ -22,7 +22,7 @@
     <!-------------------------- Tabla clientes ----------------------------->
     <h4>Clientes actuales</h4>
     <table class="table table-striped">
-        <thead>
+        <thead class="table-light">
             <tr>
                 <td>ID</td>
                 <td>Nombre</td>
@@ -39,9 +39,9 @@
                     <td>{{ cliente.0 }}</td>
                     <td>{{ cliente.1 }}</td>
                     <td>{{ cliente.2 }}</td>
-                    <td>{{ cliente.3 }}</td>
-                    <td>{{ cliente.4 }}</td>
-                    <td>{{ cliente.5 }}</td>
+                    <td>${{ cliente.3 }}</td>
+                    <td>${{ cliente.4 }}</td>
+                    <td>${{ cliente.5 }}</td>
                     <td>
                         <a href="/editar_cliente/{{cliente.0}}">Editar</a>
                         <a href="/eliminar_cliente/{{cliente.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
@@ -54,7 +54,7 @@
   <!-------------------------- Tabla articulos ----------------------------->
     <h4>Articulos Registrados</h4>
     <table class='table table-striped'>
-        <thead>
+        <thead class="table-light">
             <tr>
                 <td>ID articulo</td>
                 <td>ID fabrica</td>
@@ -88,7 +88,7 @@
     <!-------------------------- Tabla fábricas ----------------------------->
     <h4>Fábricas</h4>
     <table class="table table-striped">
-        <thead>
+        <thead class="table-light">
             <tr>
                 <td>ID</td>
                 <td>Nombre</td>

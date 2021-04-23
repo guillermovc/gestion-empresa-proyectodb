@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2021 at 07:50 PM
+-- Generation Time: Apr 23, 2021 at 10:13 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -41,9 +41,9 @@ CREATE TABLE `articulos` (
 --
 
 INSERT INTO `articulos` (`id`, `fabrica_id`, `nombre`, `precio`, `existencias`, `descripcion`) VALUES
-(1, 1, 'Bicicleta Chila', 2499.99, 9, 'Bicicleta roja de velocidades'),
-(3, 1, 'Camiseta con estampado', 170, 20, 'Todas las tallas. Colores: verde, rojo, blanco y azul.'),
-(4, 1, 'Short Playero', 250, 15, 'Increible short playero para disfrutar tus vacaciones.');
+(1, 1, 'Bicicleta', 20, 9, 'Bicicleta roja de velocidades'),
+(3, 1, 'Camiseta con estampado', 10, 10, 'Todas las tallas. Colores: verde, rojo, blanco y azul.'),
+(4, 1, 'Short Playero', 5, 15, 'Increible short playero para disfrutar tus vacaciones.');
 
 -- --------------------------------------------------------
 
@@ -66,7 +66,8 @@ CREATE TABLE `clientes` (
 
 INSERT INTO `clientes` (`id`, `nombre_completo`, `direccion`, `saldo`, `limite_saldo`, `descuento`) VALUES
 (1, 'Juan Perez', 'Avenida Máquina #501 Col. Nacozari', 5381.05, 300000, 60),
-(3, 'María Félix', 'Calle Alamos #1914 Col. Sonora', 3200, 300000, 700);
+(3, 'María Félix', 'Calle Alamos #1914 Col. Sonora', 3200, 300000, 700),
+(10, 'Pablo Medrano', 'Av. Mendoza #12 Col. Olivares', 5832, 300000, 200);
 
 -- --------------------------------------------------------
 
@@ -115,7 +116,8 @@ INSERT INTO `fabricas` (`id`, `nombre`, `telefono`, `direccion`, `ciudad`, `alte
 CREATE TABLE `pedidos` (
   `id` int(10) NOT NULL,
   `cliente_id` int(11) NOT NULL,
-  `fecha` date NOT NULL,
+  `total` float NOT NULL,
+  `fecha` date NOT NULL DEFAULT current_timestamp(),
   `entrega` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -194,13 +196,13 @@ ALTER TABLE `articulos`
 -- AUTO_INCREMENT for table `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `detalle_pedidos`
 --
 ALTER TABLE `detalle_pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `fabricas`
@@ -212,7 +214,7 @@ ALTER TABLE `fabricas`
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `usuarios`

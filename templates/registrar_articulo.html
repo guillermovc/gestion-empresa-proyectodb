@@ -11,24 +11,32 @@
 {% endwith %}
 
 
-    <h3>Registro de Articulos</h3>
+<h3>Registro de Articulos</h3>
 
-    <p>Llene los campos del Articulo para completar su registro</p>
+<p>Llene los campos del Articulo para completar su registro</p>
 
-    <form action="/registrar_articulo" method="POST">
-        <label for="Nombre">Nombre del Articulo</label><br>
-        <input type="text" name="nombre" placeholder="Nombre del articulo" required><br>
-        <label for="Existencias">existencias</label><br>
-        <input type="text" name="existencias" placeholder="Existencias" required><br>
-        <label for="Descripción">descripcion</label><br>
-        <input type="text" name="descripcion"  required><br>
-        <label for="fabrica">fabrica</label><br>
-        <select name="fabrica"><br>
-            {% for fabrica in fabricas %}
-            <option value="{{ fabrica.0 }}">{{ fabrica.1 }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Registrar articulo">
-    </form>
+<form action="/registrar_articulo" method="POST">
+    <label for="nombre">Nombre del Artículo</label><br>
+    <input type="text" name="nombre" id="nombre" placeholder="Nombre del articulo" required><br>
+    
+    <label for="precio">Precio del Artículo</label><br>
+    <input type="text" name="precio" id="precio" placeholder="Precio" required><br>
+
+    <label for="existencias">Existencias</label><br>
+    <input type="text" name="existencias" id="existencias" placeholder="Existencias" required><br>
+
+    <label for="descripción">Descripcion</label><br>
+    <textarea type="text" name="descripcion" id="descripción" rows="5" cols="30" required></textarea><br>
+
+    <label for="fabrica">Fabrica</label><br>
+    <select name="fabrica" id="fabrica">
+        {% for fabrica in fabricas %}
+        <option value="{{ fabrica.0 }}">{{ fabrica.1 }}</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+    <input type="submit" value="Registrar articulo">
+</form>
 
 {% endblock %}

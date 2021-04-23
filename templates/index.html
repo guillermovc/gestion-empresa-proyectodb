@@ -2,6 +2,10 @@
 
 {% block body %}
 
+
+
+<h1>{{ header_title }}</h1>
+
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
@@ -13,19 +17,7 @@
     {% endif %}
 {% endwith %}
 
-<h1>{{ header_title }}</h1>
-
 {% if usuario %}
-    <!---<h2>Sesion iniciada como {{ usuario }}</h2>
-    <a href="logout">Cerrar sesión</a>
-
-    <br>
-    <a href="registrar_cliente">Registrar un nuevo cliente</a>
-    <br>
-    <a href="registrar_articulo">Registrar un nuevo articulo</a>
-
-    <br>
-    <a href="registrar_fabrica">Registrar una nueva fábrica</a>--->
 
     <!-------------------------- Tabla clientes ----------------------------->
     <h4>Clientes actuales</h4>
@@ -52,7 +44,7 @@
                     <td>{{ cliente.5 }}</td>
                     <td>
                         <a href="/editar_cliente/{{cliente.0}}">Editar</a>
-                        <a href="/eliminar_cliente/{{cliente.0}}">Eliminar</a>
+                        <a href="/eliminar_cliente/{{cliente.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -67,6 +59,7 @@
                 <td>ID articulo</td>
                 <td>ID fabrica</td>
                 <td>Nombre</td>
+                <td>Precio</td>
                 <td>Existencias</td>
                 <td>Descripción</td>
                 <td>Opciones</td>
@@ -78,12 +71,13 @@
                     <td>{{ articulo.0 }}</td>
                     <td>{{ articulo.1 }}</td>
                     <td>{{ articulo.2 }}</td>
-                    <td>{{ articulo.3 }}</td>
+                    <td>${{ articulo.3 }}</td>
                     <td>{{ articulo.4 }}</td>
+                    <td>{{ articulo.5 }}</td>
 
                     <td>
                         <a href="/editar_articulo/{{articulo.0}}">Editar</a>
-                        <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
+                        <a href="/eliminar_articulo/{{articulo.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -101,6 +95,7 @@
                 <td>Teléfono</td>
                 <td>Dirección</td>
                 <td>Ciudad</td>
+                <td>Alternativa</td>
                 <td>Opciones</td>
             </tr>
         </thead>           
@@ -113,8 +108,15 @@
                     <td>{{ fabrica.3 }}</td>
                     <td>{{ fabrica.4 }}</td>
                     <td>
+                        {% if fabrica.5 == 0 %}
+                            No
+                        {% else %}
+                            Si
+                        {% endif %}
+                    </td>
+                    <td>
                         <a href="/editar_fabrica/{{fabrica.0}}">Editar</a>
-                        <a href="/eliminar_fabrica/{{fabrica.0}}">Eliminar</a>
+                        <a href="/eliminar_fabrica/{{fabrica.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -128,7 +130,7 @@
     <a href="registro">registrarse</a>
 
     <h4>Ingrese sus datos</h4>
-
+    
     <form action="login" method="POST">
         <input type="text" name="user" placeholder="Nombre de usuario" required ><br>
         <input type="password" name="password" placeholder="Contraseña" required ><br>

@@ -204,7 +204,7 @@ def registrar_articulo() -> 'html':
             descripcion = request.form['descripcion']
             ID_fabrica = request.form['fabrica']
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO articulos (nombre, precio, existencias, descripcion, fabrica_id) VALUES (%s, %s, %s, %s)',
+            cur.execute('INSERT INTO articulos (nombre, precio, existencias, descripcion, fabrica_id) VALUES (%s, %s, %s, %s, %s)',
                         (nombre, precio, existencias, descripcion, ID_fabrica))
             mysql.connection.commit()
             flash('Articulo registrado correctamente')

@@ -221,19 +221,13 @@ def registrar_articulo() -> 'html':
 @app.route('/editar_articulo/<string:id>')
 def editar_articulo(id):
 
-    cur = mysql.connection.cursor()
-    cur.execute(f'SELECT * FROM articulos WHERE id = {id}')
-    data = cur.fetchall()
-    cur.execute(f'SELECT * FROM fabricas')
-    fabricas = cur.fetchall()
-    return render_template('editar_articulo.html', articulo = data[0], fabricas=fabricas)
-
     if 'usuario' in session:
         cur = mysql.connection.cursor()
         cur.execute(f'SELECT * FROM articulos WHERE id = {id}')
         data = cur.fetchall()
-
-        return render_template('editar_articulo.html', articulo = data[0])
+        cur.execute(f'SELECT * FROM fabricas')
+        fabricas = cur.fetchall()
+        return render_template('editar_articulo.html', articulo = data[0], fabricas=fabricas)
     
     else:
         return redirect(url_for('index'))

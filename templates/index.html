@@ -18,9 +18,43 @@
 {% endwith %}
 
 {% if usuario %}
+    
+    <br>
+
+    <!-------------------------- Tabla pedidos ----------------------------->
+    <h4 class="text-center">Pedidos</h4>
+    <table class="table table-striped">
+        <thead class="table-light">
+            <tr>
+                <td>ID</td>
+                <td>Cliente</td>
+                <td>Direccion</td>
+                <td>Total</td>
+                <td>Fecha de orden</td>
+                <td>Fecha de entrega</td>
+                <td>Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+                <tr>
+                    <td>{{ pedido.0 }}</td>
+                    <td>{{ pedido.1 }}</td>
+                    <td>{{ pedido.2 }}</td>
+                    <td>${{ pedido.3 }}</td>
+                    <td>{{ pedido.4 }}</td>
+                    <td>{{ pedido.5 }}</td>
+                    <td>
+                        <a href="/detalles_pedido/{{pedido.0}}">Ver detalles</a>
+                        <a href="/eliminar_pedido/{{pedido.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <!-------------------------- Tabla clientes ----------------------------->
-    <h4>Clientes actuales</h4>
+    <h4 class="text-center">Clientes actuales</h4>
     <table class="table table-striped">
         <thead class="table-light">
             <tr>
@@ -51,8 +85,10 @@
         </tbody>
     </table>
 
+    <br>
+
   <!-------------------------- Tabla articulos ----------------------------->
-    <h4>Articulos Registrados</h4>
+    <h4 class="text-center">Articulos Registrados</h4>
     <table class='table table-striped'>
         <thead class="table-light">
             <tr>
@@ -84,9 +120,10 @@
         </tbody>
     </table>
 
+    <br>
 
     <!-------------------------- Tabla fábricas ----------------------------->
-    <h4>Fábricas</h4>
+    <h4 class="text-center">Fábricas</h4>
     <table class="table table-striped">
         <thead class="table-light">
             <tr>

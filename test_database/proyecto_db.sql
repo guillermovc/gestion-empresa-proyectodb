@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2021 at 10:13 PM
+-- Generation Time: Apr 27, 2021 at 07:33 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -41,9 +41,10 @@ CREATE TABLE `articulos` (
 --
 
 INSERT INTO `articulos` (`id`, `fabrica_id`, `nombre`, `precio`, `existencias`, `descripcion`) VALUES
-(1, 1, 'Bicicleta', 20, 9, 'Bicicleta roja de velocidades'),
-(3, 1, 'Camiseta con estampado', 10, 10, 'Todas las tallas. Colores: verde, rojo, blanco y azul.'),
-(4, 1, 'Short Playero', 5, 15, 'Increible short playero para disfrutar tus vacaciones.');
+(1, 1, 'Bicicleta', 20, 3, 'Bicicleta roja de velocidades'),
+(3, 1, 'Camiseta con estampado', 10, 7, 'Todas las tallas. Colores: verde, rojo, blanco y azul.'),
+(4, 1, 'Short Playero', 5, 14, 'Increible short playero para disfrutar tus vacaciones.'),
+(5, 3, 'Motocicleta Italika DT 110cc', 16990, 3, 'Blanca\r\nIncluye casco\r\nVelocidad máxima 75 km/h');
 
 -- --------------------------------------------------------
 
@@ -65,9 +66,8 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`id`, `nombre_completo`, `direccion`, `saldo`, `limite_saldo`, `descuento`) VALUES
-(1, 'Juan Perez', 'Avenida Máquina #501 Col. Nacozari', 5381.05, 300000, 60),
-(3, 'María Félix', 'Calle Alamos #1914 Col. Sonora', 3200, 300000, 700),
-(10, 'Pablo Medrano', 'Av. Mendoza #12 Col. Olivares', 5832, 300000, 200);
+(3, 'María Félix', 'Calle Alamos #1914 Col. Sonora', 20265, 300000, 700),
+(10, 'Pablo Medrano', 'Av. Mendoza #12 Col. Olivares', 22822, 300000, 200);
 
 -- --------------------------------------------------------
 
@@ -82,6 +82,17 @@ CREATE TABLE `detalle_pedidos` (
   `cantidad` int(11) NOT NULL,
   `total` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `detalle_pedidos`
+--
+
+INSERT INTO `detalle_pedidos` (`id`, `pedido_id`, `articulo_id`, `cantidad`, `total`) VALUES
+(26, 25, 5, 1, 16990),
+(27, 26, 1, 1, 20),
+(28, 26, 3, 1, 10),
+(29, 26, 4, 1, 5),
+(30, 26, 5, 1, 16990);
 
 -- --------------------------------------------------------
 
@@ -120,6 +131,14 @@ CREATE TABLE `pedidos` (
   `fecha` date NOT NULL DEFAULT current_timestamp(),
   `entrega` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `pedidos`
+--
+
+INSERT INTO `pedidos` (`id`, `cliente_id`, `total`, `fecha`, `entrega`) VALUES
+(25, 10, 16990, '2021-04-26', '2021-04-30'),
+(26, 3, 17025, '2021-04-26', '2021-04-29');
 
 -- --------------------------------------------------------
 
@@ -162,7 +181,8 @@ ALTER TABLE `clientes`
 -- Indexes for table `detalle_pedidos`
 --
 ALTER TABLE `detalle_pedidos`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `prueba` (`pedido_id`);
 
 --
 -- Indexes for table `fabricas`
@@ -174,7 +194,8 @@ ALTER TABLE `fabricas`
 -- Indexes for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `prueba2` (`cliente_id`);
 
 --
 -- Indexes for table `usuarios`
@@ -190,7 +211,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT for table `articulos`
 --
 ALTER TABLE `articulos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `clientes`
@@ -202,7 +223,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT for table `detalle_pedidos`
 --
 ALTER TABLE `detalle_pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `fabricas`
@@ -214,13 +235,29 @@ ALTER TABLE `fabricas`
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `detalle_pedidos`
+--
+ALTER TABLE `detalle_pedidos`
+  ADD CONSTRAINT `prueba` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD CONSTRAINT `prueba2` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

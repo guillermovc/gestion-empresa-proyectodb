@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 import bcrypt
 
 app = Flask(__name__)
+app._static_folder = 'static/'
 
 # ===================================== DATABASE =====================================
 app.config['MYSQL_HOST'] = 'localhost'
@@ -283,7 +284,7 @@ def eliminar_articulo(id):
     return redirect(url_for('index'))
 
 # """"""""""""""""""""""""""""" Ruta editar cliente """""""""""""""""""""""""""""
-@app.route('/editar_cliente/<string:id>')
+@app.route('/editar_cliente/<id>')
 def editar_cliente(id) -> 'html':
     cur = mysql.connection.cursor()
     cur.execute(f'SELECT * FROM clientes WHERE id = {id}')
@@ -522,7 +523,7 @@ def registrar_pedido() -> 'html':
         return redirect(url_for('index'))
 
 # """"""""""""""""""""""""""""" Ruta eliminar articulo """""""""""""""""""""""""""""
-@app.route('/eliminar_pedido/<string:id>')
+@app.route('/eliminar_pedido/<id>')
 def eliminar_pedido(id):
     cur = mysql.connection.cursor()
     cur.execute(f'DELETE FROM pedidos WHERE id = {id}')
@@ -559,7 +560,7 @@ def detalles_pedido(id) -> 'html':
         # print(f'IInformación de los articulos: {info_articulos}')
 
         # Cerramos la conexión 
-        cur.close()
+        # cur.close()
 
         return render_template('detalles_pedido.html',
                                 pedido=info_pedido,

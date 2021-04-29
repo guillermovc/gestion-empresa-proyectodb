@@ -5,7 +5,10 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-            <p>{{ message }}</p>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         {% endfor %}
     {% endif %}
 {% endwith %}
@@ -26,7 +29,8 @@
     <input type="text" name="existencias" id="existencias" placeholder="Existencias" required><br>
 
     <label for="descripción">Descripcion</label><br>
-    <textarea type="text" name="descripcion" id="descripción" rows="5" cols="30" required></textarea><br>
+    <textarea type="text" name="descripcion" id="descripción" rows="5" 
+    cols="30" required style="resize:none;"></textarea><br>
 
     <label for="fabrica">Fabrica</label><br>
     <select name="fabrica" id="fabrica">

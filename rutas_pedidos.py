@@ -30,10 +30,6 @@ def registrar_pedido() -> 'html':
             cliente_id = int(request.form['cliente'])   # Id del cliente
             fecha_entrega = request.form['fecha_entrega']   # Fecha de la entrega
 
-            print(f'Articulos: {articulos_pedidos}')
-            print(f'Cliente id: {cliente_id}')
-
-
             # Verificar que hayan suficientes articulos para satisfacer el pedido
             cur.execute('SELECT id, existencias FROM articulos') # Pedimos id y num. articulos existentes
             articulos_disp = cur.fetchall() 
@@ -122,7 +118,6 @@ def registrar_pedido() -> 'html':
             # Agregamos el crédito que generó el pedido a la cuenta del usuario
             cur.execute("""SELECT saldo FROM clientes WHERE id=%s """,[cliente_id])
             saldo_cliente = cur.fetchall()[0][0]
-            print(f'Saldo cliente {saldo_cliente}')
 
             saldo_cliente += total_cuenta
             cur.execute("""
@@ -165,7 +160,6 @@ def detalles_pedido(id) -> 'html':
         # Consulta para obtener información general del pedido
         cur.execute("""SELECT * FROM pedidos WHERE id=%s""", [id])
         info_pedido = cur.fetchall()[0]
-        print(info_pedido)
 
         # Informacion del cliente
         id_cliente = info_pedido[1]
@@ -174,7 +168,10 @@ def detalles_pedido(id) -> 'html':
 
         # Información de los artículos
         id_pedido = info_pedido[0]
-        cur.execute("""SELECT * FROM articulos 
+        cur.execute("""SELECT articulos.id, articulos.fabrica_id, 
+                    articulos.nombre, articulos.precio, detalle_pedidos.cantidad, 
+                    articulos.descripcion 
+                    FROM articulos 
                     INNER JOIN detalle_pedidos 
                     ON articulos.id=detalle_pedidos.articulo_id 
                     WHERE detalle_pedidos.pedido_id = %s""", [id_pedido])
@@ -188,6 +185,7 @@ def detalles_pedido(id) -> 'html':
         # cur.close()
 
         return render_template('detalles_pedido.html',
+                                titulo = f'Detalles del pedido {id}',
                                 pedido=info_pedido,
                                 cliente=info_cliente,
                                 articulos=info_articulos,
@@ -203,7 +201,7 @@ def eliminar_pedido(id):
     if 'usuario' in session:
         cur = mysql.connection.cursor()
 
-        # Obtenemos el monto del pedido para devolverlo al credito del cliente
+        # Devolver el credito al cliente 
         cur.execute(f'SELECT total, cliente_id FROM pedidos WHERE id ={id}')
         total_pedido, cliente_id = cur.fetchall()[0]
         
@@ -217,6 +215,23 @@ def eliminar_pedido(id):
             WHERE id = %s""", (saldo_cliente, cliente_id))
         mysql.connection.commit()
 
+        # Devolver las existencias a los artículos
+        # Información de los artículos
+        cur.execute("""SELECT articulos.id, detalle_pedidos.cantidad FROM articulos 
+                    INNER JOIN detalle_pedidos 
+                    ON articulos.id=detalle_pedidos.articulo_id 
+                    WHERE detalle_pedidos.pedido_id = %s""", [id])
+        articulos_y_cant_pedida = cur.fetchall()
+
+        for id_articulo, cant_pedida in articulos_y_cant_pedida:
+            print(f'ID_ARTICULO: {id_articulo}, cant_pedida: {cant_pedida}')
+            cur.execute("""
+            UPDATE articulos 
+            SET existencias = existencias + %s 
+            WHERE id = %s;""", (cant_pedida, id_articulo))
+            mysql.connection.commit()
+        
+        # Eliminar el pedido de la tabla
         cur.execute(f'DELETE FROM pedidos WHERE id = {id}')
         mysql.connection.commit()
         flash('El pedido ha sido eliminado.')

@@ -192,7 +192,7 @@ def login() -> 'html':
 # """"""""""""""""""""""""""""" Ruta cerrar sesion """""""""""""""""""""""""""""
 @app.route('/logout')
 def logout():
-    session.pop('usuario', None)
+    session.clear()
     return redirect(url_for('index'))
 
 # ==================================== FIN RUTAS ======================================

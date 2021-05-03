@@ -148,7 +148,8 @@ def registrar_pedido() -> 'html':
 
             return render_template('registrar_pedido.html',
                                     articulos=articulos,
-                                    clientes=clientes)
+                                    clientes=clientes,
+                                    usuario=session['usuario'])
     
     # No hay una sesión iniciada
     else:
@@ -189,7 +190,8 @@ def detalles_pedido(id) -> 'html':
         return render_template('detalles_pedido.html',
                                 pedido=info_pedido,
                                 cliente=info_cliente,
-                                articulos=info_articulos)
+                                articulos=info_articulos,
+                                usuario=session['usuario'])
 
     return redirect(url_for('index'))
 
@@ -197,8 +199,25 @@ def detalles_pedido(id) -> 'html':
 # """"""""""""""""""""""""""""" Ruta eliminar pedido """""""""""""""""""""""""""""
 @pedidos.route('/eliminar_pedido/<id>')
 def eliminar_pedido(id):
-    cur = mysql.connection.cursor()
-    cur.execute(f'DELETE FROM pedidos WHERE id = {id}')
-    mysql.connection.commit()
-    flash('El pedido ha sido eliminado.')
+
+    if 'usuario' in session:
+        cur = mysql.connection.cursor()
+
+        # Obtenemos el monto del pedido para devolverlo al credito del cliente
+        cur.execute(f'SELECT total, cliente_id FROM pedidos WHERE id ={id}')
+        total_pedido, cliente_id = cur.fetchall()[0]
+        
+        cur.execute(f'SELECT saldo FROM clientes WHERE id = {cliente_id}')
+        saldo_cliente = cur.fetchall()[0][0]
+        saldo_cliente -= total_pedido
+        
+        cur.execute("""
+            UPDATE clientes 
+            SET saldo = %s 
+            WHERE id = %s""", (saldo_cliente, cliente_id))
+        mysql.connection.commit()
+
+        cur.execute(f'DELETE FROM pedidos WHERE id = {id}')
+        mysql.connection.commit()
+        flash('El pedido ha sido eliminado.')
     return redirect(url_for('index'))

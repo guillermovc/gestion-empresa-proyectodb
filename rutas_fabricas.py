@@ -27,7 +27,8 @@ def registrar_fabrica() -> 'html':
 
             flash('Fábrica registrada correctamente.')
 
-        return render_template('registrar_fabrica.html')
+        return render_template('registrar_fabrica.html',
+        usuario=session['usuario'])
 
     else:
         return redirect(url_for('index'))
@@ -36,32 +37,37 @@ def registrar_fabrica() -> 'html':
 # """"""""""""""""""""""""""""" Ruta editar fábrica """""""""""""""""""""""""""""
 @fabricas.route('/editar_fabrica/<string:id>')
 def editar_fabrica(id) -> 'html':
-    cur = mysql.connection.cursor()
-    cur.execute(f'SELECT * FROM fabricas WHERE id = {id}')
-    data = cur.fetchall()
+    if 'usuario' in session:
+        cur = mysql.connection.cursor()
+        cur.execute(f'SELECT * FROM fabricas WHERE id = {id}')
+        data = cur.fetchall()
 
-    return render_template('editar_fabrica.html', fabrica = data[0])
+        return render_template('editar_fabrica.html', 
+        fabrica = data[0], usuario=session['usuario'])
+    else:
+        return redirect(url_for('index'))
 
 
 # """"""""""""""""""""""""""""" Ruta actualizar fabrica """""""""""""""""""""""""""""
 @fabricas.route('/actualizar_fabrica/<id>', methods=['POST'])
 def actualizar_fabrica(id):
-    nombre = request.form['nombre']
-    telefono = request.form['telefono']
-    direccion = request.form['direccion']
-    ciudad = request.form['ciudad']
-    es_alternativa = int(request.form['es_alternativa'])
+    if 'usuario' in session:
+        nombre = request.form['nombre']
+        telefono = request.form['telefono']
+        direccion = request.form['direccion']
+        ciudad = request.form['ciudad']
+        es_alternativa = int(request.form['es_alternativa'])
 
-    cur = mysql.connection.cursor()
-    cur.execute("""
-    UPDATE fabricas 
-    SET nombre = %s,
-        telefono = %s,
-        direccion = %s,
-        ciudad = %s,
-        alternativa = %s
-    WHERE id = %s
-    """, (nombre, telefono, direccion, ciudad, es_alternativa, id))
-    mysql.connection.commit()
-    flash('Los cambios se aplicaron correctamente.')
+        cur = mysql.connection.cursor()
+        cur.execute("""
+        UPDATE fabricas 
+        SET nombre = %s,
+            telefono = %s,
+            direccion = %s,
+            ciudad = %s,
+            alternativa = %s
+        WHERE id = %s
+        """, (nombre, telefono, direccion, ciudad, es_alternativa, id))
+        mysql.connection.commit()
+        flash('Los cambios se aplicaron correctamente.')
     return redirect(url_for('index'))

@@ -25,10 +25,8 @@ def registrar_cliente() -> 'html':
 
             flash('Cliente registrado correctamente')
 
-        usuario = session["usuario"]
-
-        return render_template('registrar_cliente.html',
-                                usuario=usuario,)
+        return render_template('registrar_cliente.html', 
+        usuario=session['usuario'])
     else:
         return redirect(url_for('index'))
 
@@ -36,42 +34,48 @@ def registrar_cliente() -> 'html':
 # """"""""""""""""""""""""""""" Ruta editar cliente """""""""""""""""""""""""""""
 @clientes.route('/editar_cliente/<id>')
 def editar_cliente(id) -> 'html':
-    cur = mysql.connection.cursor()
-    cur.execute(f'SELECT * FROM clientes WHERE id = {id}')
-    data = cur.fetchall()
+    if 'usuario' in session:
+        cur = mysql.connection.cursor()
+        cur.execute(f'SELECT * FROM clientes WHERE id = {id}')
+        data = cur.fetchall()
 
-    return render_template('editar_cliente.html', cliente = data[0])
+        return render_template('editar_cliente.html', 
+        cliente = data[0], usuario=session['usuario'])
+    else:
+        return redirect(url_for('index'))
 
 
 # """"""""""""""""""""""""""""" Ruta actualizar cliente """""""""""""""""""""""""""""
 @clientes.route('/actualizar_cliente/<id>', methods=['POST'])
 def actualizar_cliente(id):
-    nombre = request.form['nombre']
-    direccion = request.form['direccion']
-    saldo = float(request.form['saldo'])
-    descuento = float(request.form['descuento'])
-    saldo_limite = float(request.form['saldo_limite'])
+    if 'usuario' in session:
+        nombre = request.form['nombre']
+        direccion = request.form['direccion']
+        saldo = float(request.form['saldo'])
+        descuento = float(request.form['descuento'])
+        saldo_limite = float(request.form['saldo_limite'])
 
-    cur = mysql.connection.cursor()
-    cur.execute("""
-    UPDATE clientes 
-    SET nombre_completo = %s,
-        direccion = %s,
-        saldo = %s,
-        limite_saldo = %s,
-        descuento = %s
-    WHERE id = %s
-    """, (nombre, direccion, saldo, saldo_limite, descuento, id))
-    mysql.connection.commit()
-    flash('Los cambios se aplicaron correctamente.')
+        cur = mysql.connection.cursor()
+        cur.execute("""
+        UPDATE clientes 
+        SET nombre_completo = %s,
+            direccion = %s,
+            saldo = %s,
+            limite_saldo = %s,
+            descuento = %s
+        WHERE id = %s
+        """, (nombre, direccion, saldo, saldo_limite, descuento, id))
+        mysql.connection.commit()
+        flash('Los cambios se aplicaron correctamente.')
     return redirect(url_for('index'))
 
 
 # """"""""""""""""""""""""""""" Ruta eliminar cliente """""""""""""""""""""""""""""
 @clientes.route('/eliminar_cliente/<string:id>')
 def eliminar_cliente(id):
-    cur = mysql.connection.cursor()
-    cur.execute(f'DELETE FROM clientes WHERE id = {id}')
-    mysql.connection.commit()
-    flash('El cliente ha sido eliminado.')
+    if 'usuario' in session:
+        cur = mysql.connection.cursor()
+        cur.execute(f'DELETE FROM clientes WHERE id = {id}')
+        mysql.connection.commit()
+        flash('El cliente ha sido eliminado.')
     return redirect(url_for('index'))

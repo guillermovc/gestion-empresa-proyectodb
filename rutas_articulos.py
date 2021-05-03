@@ -27,7 +27,8 @@ def registrar_articulo() -> 'html':
             cur = mysql.connection.cursor()
             cur.execute('SELECT * FROM fabricas')
             fabricas = cur.fetchall()
-            return render_template('registrar_articulo.html', fabricas=fabricas)
+            return render_template('registrar_articulo.html', 
+            fabricas=fabricas, usuario=session['usuario'])
     else:
         return redirect(url_for('index'))
 
@@ -42,7 +43,8 @@ def editar_articulo(id):
         data = cur.fetchall()
         cur.execute(f'SELECT * FROM fabricas')
         fabricas = cur.fetchall()
-        return render_template('editar_articulo.html', articulo = data[0], fabricas=fabricas)
+        return render_template('editar_articulo.html', 
+        articulo = data[0], fabricas=fabricas,usuario=session['usuario'])
     
     else:
         return redirect(url_for('index'))
@@ -51,23 +53,24 @@ def editar_articulo(id):
 # """"""""""""""""""""""""""""" Ruta actualizar articulo """""""""""""""""""""""""""""
 @articulos.route('/actualizar_articulo/<id>', methods=['POST'])
 def actualizar_articulo(id):
-    nombre = request.form['nombre']
-    precio = float(request.form['precio'])
-    existencias = float(request.form['existencias'])
-    descripcion = request.form['descripcion']
-    ID_fabrica = request.form['fabrica']
-    cur = mysql.connection.cursor()
-    cur.execute("""
-    UPDATE articulos 
-    SET nombre = %s,
-        precio = %s,
-        existencias = %s,
-        descripcion = %s,
-        fabrica_id = %s
-    WHERE id = %s
-    """, (nombre, precio, existencias, descripcion, ID_fabrica, id))
-    mysql.connection.commit()
-    flash('Los cambios se aplicaron correctamente.')
+    if 'usuario' in session:
+        nombre = request.form['nombre']
+        precio = float(request.form['precio'])
+        existencias = float(request.form['existencias'])
+        descripcion = request.form['descripcion']
+        ID_fabrica = request.form['fabrica']
+        cur = mysql.connection.cursor()
+        cur.execute("""
+        UPDATE articulos 
+        SET nombre = %s,
+            precio = %s,
+            existencias = %s,
+            descripcion = %s,
+            fabrica_id = %s
+        WHERE id = %s
+        """, (nombre, precio, existencias, descripcion, ID_fabrica, id))
+        mysql.connection.commit()
+        flash('Los cambios se aplicaron correctamente.')
 
     return redirect(url_for('index'))
 
@@ -75,8 +78,9 @@ def actualizar_articulo(id):
 # """"""""""""""""""""""""""""" Ruta eliminar articulo """""""""""""""""""""""""""""
 @articulos.route('/eliminar_articulo/<string:id>')
 def eliminar_articulo(id):
-    cur = mysql.connection.cursor()
-    cur.execute(f'DELETE FROM articulos WHERE id = {id}')
-    mysql.connection.commit()
-    flash('El cliente ha sido eliminado.')
+    if 'usuario' in session:
+        cur = mysql.connection.cursor()
+        cur.execute(f'DELETE FROM articulos WHERE id = {id}')
+        mysql.connection.commit()
+        flash('El cliente ha sido eliminado.')
     return redirect(url_for('index'))

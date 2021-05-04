@@ -32,13 +32,13 @@
     <textarea type="text" name="descripcion" id="descripción" rows="5" cols="30" required
     >{{articulo.5}}</textarea><br>
 
-    <label for="fabrica">fabrica</label><br>
+    <label for="fabrica">Fábrica</label><br>
     <select name="fabrica"><br>
         {% for fabrica in fabricas %}
         <option value="{{ fabrica.0 }}">{{ fabrica.1 }}</option>
         {% endfor %}
     </select>
-    <br>
+    <br><br>
     <input type="submit" value="Actualizar artículo">
 </form>
 

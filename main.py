@@ -189,7 +189,8 @@ def login() -> 'html':
 # """"""""""""""""""""""""""""" Ruta cerrar sesion """""""""""""""""""""""""""""
 @app.route('/logout')
 def logout():
-
+    session.clear()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)

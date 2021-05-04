@@ -144,7 +144,7 @@ def registrar_pedido() -> 'html':
             return render_template('registrar_pedido.html',
                                     articulos=articulos,
                                     clientes=clientes,
-                                    usuario=session['usuario'])
+                                    usuario=session['nombre'])
     
     # No hay una sesión iniciada
     else:
@@ -189,7 +189,7 @@ def detalles_pedido(id) -> 'html':
                                 pedido=info_pedido,
                                 cliente=info_cliente,
                                 articulos=info_articulos,
-                                usuario=session['usuario'])
+                                usuario=session['nombre'])
 
     return redirect(url_for('index'))
 

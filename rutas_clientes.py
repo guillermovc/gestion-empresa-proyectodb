@@ -26,7 +26,7 @@ def registrar_cliente() -> 'html':
             flash('Cliente registrado correctamente')
 
         return render_template('registrar_cliente.html', 
-        usuario=session['usuario'])
+        usuario=session['nombre'])
     else:
         return redirect(url_for('index'))
 
@@ -40,7 +40,7 @@ def editar_cliente(id) -> 'html':
         data = cur.fetchall()
 
         return render_template('editar_cliente.html', 
-        cliente = data[0], usuario=session['usuario'])
+        cliente = data[0], usuario=session['nombre'])
     else:
         return redirect(url_for('index'))
 

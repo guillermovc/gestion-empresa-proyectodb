@@ -7,24 +7,25 @@
 <p>Modifique los campos que desea editar</p>
 
 <form action="/actualizar_cliente/{{cliente.0}}" method="POST">
+
     <label for="nombre">Nombre completo</label><br>
-    <input type="text" name="nombre" placeholder="Nombre completo" required
+    <input type="text" name="nombre" id="nombre" placeholder="Nombre completo" required
     value="{{cliente.1}}"><br>
 
     <label for="direccion">Direccion</label><br>
-    <input type="text" name="direccion" placeholder="Dirección" required
+    <input type="text" name="direccion" id="direccion" placeholder="Dirección" required
     value="{{cliente.2}}"><br>
 
     <label for="saldo">Saldo</label><br>
-    <input type="text" name="saldo" required value="{{cliente.3}}"><br>
+    <input type="text" name="saldo" id="saldo" required value="{{cliente.3}}"><br>
     
-    <label for="saldo">Saldo límite</label><br>
-    <input type="text" name="saldo_limite" required value="{{cliente.4}}"><br>
+    <label for="saldo_limite">Saldo límite</label><br>
+    <input type="text" name="saldo_limite" id="saldo_limite" required value="{{cliente.4}}"><br>
 
     <label for="descuento">Descuento</label><br>
-    <input type="text" name="descuento" required value="{{cliente.5}}"><br><br>
+    <input type="text" name="descuento" id="descuento" required value="{{cliente.5}}"><br><br>
 
-    <input type="submit" value="Actualiza datos">
+    <input type="submit" value="Actualizar datos">
 </form>
 
 {% endblock %}

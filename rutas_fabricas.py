@@ -28,7 +28,7 @@ def registrar_fabrica() -> 'html':
             flash('Fábrica registrada correctamente.')
 
         return render_template('registrar_fabrica.html',
-        usuario=session['usuario'])
+        usuario=session['nombre'])
 
     else:
         return redirect(url_for('index'))
@@ -43,7 +43,7 @@ def editar_fabrica(id) -> 'html':
         data = cur.fetchall()
 
         return render_template('editar_fabrica.html', 
-        fabrica = data[0], usuario=session['usuario'])
+        fabrica = data[0], usuario=session['nombre'])
     else:
         return redirect(url_for('index'))
 

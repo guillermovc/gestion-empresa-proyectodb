@@ -28,7 +28,7 @@ def registrar_articulo() -> 'html':
             cur.execute('SELECT * FROM fabricas')
             fabricas = cur.fetchall()
             return render_template('registrar_articulo.html', 
-            fabricas=fabricas, usuario=session['usuario'])
+            fabricas=fabricas, usuario=session['nombre'])
     else:
         return redirect(url_for('index'))
 
@@ -44,7 +44,7 @@ def editar_articulo(id):
         cur.execute(f'SELECT * FROM fabricas')
         fabricas = cur.fetchall()
         return render_template('editar_articulo.html', 
-        articulo = data[0], fabricas=fabricas,usuario=session['usuario'])
+        articulo = data[0], fabricas=fabricas,usuario=session['nombre'])
     
     else:
         return redirect(url_for('index'))

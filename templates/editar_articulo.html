@@ -23,21 +23,21 @@
     <input type="text" name="precio" id="precio" placeholder="Precio" required
     value="{{articulo.3}}"><br>
 
-
-    <label for="existencias">existencias</label><br>
-    <input type="text" name="existencias" placeholder="Existencias" required
+    <label for="existencias">Existencias</label><br>
+    <input type="text" name="existencias" id="existencias" placeholder="Existencias" required
     value="{{articulo.4}}"><br>
 
-    <label for="descripción">Descripcion</label><br>
-    <textarea type="text" name="descripcion" id="descripción" rows="5" cols="30" required
+    <label for="descripcion">Descripcion</label><br>
+    <textarea type="text" name="descripcion" id="descripcion" rows="5" cols="30" required
     >{{articulo.5}}</textarea><br>
 
     <label for="fabrica">Fábrica</label><br>
-    <select name="fabrica"><br>
+    <select name="fabrica" id=fabrica><br>
         {% for fabrica in fabricas %}
         <option value="{{ fabrica.0 }}">{{ fabrica.1 }}</option>
         {% endfor %}
     </select>
+    
     <br><br>
     <input type="submit" value="Actualizar artículo">
 </form>

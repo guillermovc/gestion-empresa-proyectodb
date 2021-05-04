@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+<h3>Registro de Pedido</h3>
+
+<p>Elija los articulos, la cantidad y el cliente para realizar un pedido</p>
+
+<form action="/registrar_pedido" method="POST">
+    
+    <div class="row">
+
+    {% for articulo in articulos %}
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header"><h5 class="card-title">{{ articulo.2 }}</h5></div>
+                <div class="card-body">
+                    <p class="card-text">Precio: ${{ articulo.3 }}</p>
+                    <p class="card-text">Existencias: {{articulo.4}}</p>
+                    <p class="card-text">{{articulo.5}}</p>
+                    <p>Agregue un articulo ingresando la cantidad deseada.</p>
+                    <label for="cantidad_articulo_{{articulo.0}}">Cantidad</label>
+                    <input type="number" name="cantidad_articulo_{{articulo.0}}" id="cantidad_articulo_{{articulo.0}}" value=0>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    </div>   
+
+    <label for="cliente">Cliente</label><br>
+    <select name="cliente" id="cliente">
+        {% for cliente in clientes %}
+            <option value="{{ cliente.0 }}">
+                {{ cliente.0 }} | 
+                {{ cliente.1 }} | 
+                {{ cliente.2 }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+    <label for="fecha_entrega">Fecha de entrega</label><br>
+    <input type="date" id="fecha_entrega" name="fecha_entrega" required>
+
+    <br><br>
+    <input type="submit" value="Realizar pedido">
+</form>
+
+{% endblock %}

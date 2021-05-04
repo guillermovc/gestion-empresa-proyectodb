@@ -13,7 +13,7 @@
     {% endif %}
 {% endwith %}
 
-    <h3>Registro de clientes</h3>
+    <h3>Registro de Fábrica</h3>
 
     <p>Llene los campos para registrar una nueva fábrica</p>
 
@@ -30,11 +30,11 @@
         <label for="ciudad">Ciudad</label><br>
         <input type="text" name="ciudad" id="ciudad" required><br><br>
 
-        <label for="no_alternativa">No alternativa</label>
-        <input type="radio" name="es_alternativa" id="no_alternativa" value="0" required><br>
-
-        <label for="alternativa">Alternativa</label>
-        <input type="radio" name="es_alternativa" id="alternativa" value="1" required><br>
+        <label for="es_alternativa">Seleccione si la fábrica es alternativa o no</label><br>
+        <select name="es_alternativa" id="es_alternativa">
+            <option value="0">No alternativa</option>
+            <option value="1">Alternativa</option>
+        </select><br>
 
         <br>
         <input type="submit" value="Registrar fábrica">

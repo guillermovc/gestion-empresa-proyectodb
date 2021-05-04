@@ -2,6 +2,10 @@
 
 {% block body %}
 
+
+
+<h1>{{ header_title }}</h1>
+
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
@@ -13,24 +17,46 @@
     {% endif %}
 {% endwith %}
 
-<h1>{{ header_title }}</h1>
-
 {% if usuario %}
-    <h2>Sesion iniciada como {{ usuario }}</h2>
-    <a href="logout">Cerrar sesión</a>
+    
+    <br>
 
-    <br>
-    <a href="registrar_cliente">Registrar un nuevo cliente</a>
-    <br>
-    <a href="registrar_articulo">Registrar un nuevo articulo</a>
-
-    <br>
-    <a href="registrar_fabrica">Registrar una nueva fábrica</a>
+    <!-------------------------- Tabla pedidos ----------------------------->
+    <h4 class="text-center">Pedidos</h4>
+    <table class="table table-striped">
+        <thead class="table-light">
+            <tr>
+                <td>ID</td>
+                <td>Cliente</td>
+                <td>Direccion</td>
+                <td>Total</td>
+                <td>Fecha de orden</td>
+                <td>Fecha de entrega</td>
+                <td>Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+                <tr>
+                    <td>{{ pedido.0 }}</td>
+                    <td>{{ pedido.1 }}</td>
+                    <td>{{ pedido.2 }}</td>
+                    <td>${{ pedido.3 }}</td>
+                    <td>{{ pedido.4 }}</td>
+                    <td>{{ pedido.5 }}</td>
+                    <td>
+                        <a href="/detalles_pedido/{{pedido.0}}">Ver detalles</a>
+                        <a href="/eliminar_pedido/{{pedido.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <!-------------------------- Tabla clientes ----------------------------->
-    <h4>Clientes actuales</h4>
+    <h4 class="text-center">Clientes actuales</h4>
     <table class="table table-striped">
-        <thead>
+        <thead class="table-light">
             <tr>
                 <td>ID</td>
                 <td>Nombre</td>
@@ -47,53 +73,70 @@
                     <td>{{ cliente.0 }}</td>
                     <td>{{ cliente.1 }}</td>
                     <td>{{ cliente.2 }}</td>
-                    <td>{{ cliente.3 }}</td>
-                    <td>{{ cliente.4 }}</td>
-                    <td>{{ cliente.5 }}</td>
+                    <td>${{ cliente.3 }}</td>
+                    <td>${{ cliente.4 }}</td>
+                    <td>${{ cliente.5 }}</td>
                     <td>
                         <a href="/editar_cliente/{{cliente.0}}">Editar</a>
-                        <a href="/eliminar_cliente/{{cliente.0}}">Eliminar</a>
+                        <a href="/eliminar_cliente/{{cliente.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    <br>
+
   <!-------------------------- Tabla articulos ----------------------------->
-    <h4>Articulos Registrados</h4>
+    <h4 class="text-center">Articulos Registrados</h4>
     <table class='table table-striped'>
-        <thead>
+        <thead class="table-light">
             <tr>
                 <td>ID articulo</td>
                 <td>ID fabrica</td>
                 <td>Nombre</td>
+                <td>Precio</td>
                 <td>Existencias</td>
                 <td>Descripción</td>
+                <td>Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+                {% for articulo in articulos %}
+                <tr>
+                    <td>{{ articulo.0 }}</td>
+                    <td>{{ articulo.1 }}</td>
+                    <td>{{ articulo.2 }}</td>
+                    <td>${{ articulo.3 }}</td>
+                    <td>{{ articulo.4 }}</td>
+                    <td>{{ articulo.5 }}</td>
+
+                    <td>
+                        <a href="/editar_articulo/{{articulo.0}}">Editar</a>
+                        <a href="/eliminar_articulo/{{articulo.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
 
     <!-------------------------- Tabla fábricas ----------------------------->
-    <h4>Fábricas</h4>
+    <h4 class="text-center">Fábricas</h4>
     <table class="table table-striped">
-        <thead>
+        <thead class="table-light">
             <tr>
                 <td>ID</td>
                 <td>Nombre</td>
                 <td>Teléfono</td>
                 <td>Dirección</td>
                 <td>Ciudad</td>
+                <td>Alternativa</td>
                 <td>Opciones</td>
             </tr>
-        </thead>
+        </thead>           
         <tbody>
-            {% for articulo in articulos %}
-                <tr>
-                    <td>{{ articulo.0 }}</td>
-                    <td>{{ articulo.1 }}</td>
-                    <td>{{ articulo.2 }}</td>
-                    <td>{{ articulo.3 }}</td>
-                    <td>{{ articulo.4 }}</td>
-                    <td>
-                        <a href="/editar_articulo/{{articulo.0}}">Editar</a>
-                        <a href="/eliminar_articulo/{{articulo.0}}">Eliminar</a>
             {% for fabrica in fabricas %}
                 <tr>
                     <td>{{ fabrica.0 }}</td>
@@ -102,8 +145,15 @@
                     <td>{{ fabrica.3 }}</td>
                     <td>{{ fabrica.4 }}</td>
                     <td>
+                        {% if fabrica.5 == 0 %}
+                            No
+                        {% else %}
+                            Si
+                        {% endif %}
+                    </td>
+                    <td>
                         <a href="/editar_fabrica/{{fabrica.0}}">Editar</a>
-                        <a href="/eliminar_fabrica/{{fabrica.0}}">Eliminar</a>
+                        <a href="/eliminar_fabrica/{{fabrica.0}}" onclick="return confirm('¿Está seguro?');">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -117,7 +167,7 @@
     <a href="registro">registrarse</a>
 
     <h4>Ingrese sus datos</h4>
-
+    
     <form action="login" method="POST">
         <input type="text" name="user" placeholder="Nombre de usuario" required ><br>
         <input type="password" name="password" placeholder="Contraseña" required ><br>

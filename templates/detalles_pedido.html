@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<br>
+<h3 class="text-center">Detalles del pedido {{pedido.0}}</h3>
+<br>
+<h4>Información general</h4>
+<table class="table table-striped">
+    <thead class="table-light">
+        <tr>
+            <td>ID</td>
+            <td>Cliente ID</td>
+            <td>Total</td>
+            <td>Fecha de orden</td>
+            <td>Fecha de entrega</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ pedido.0 }}</td>
+            <td>{{ pedido.1 }}</td>
+            <td>${{ pedido.2 }}</td>
+            <td>{{ pedido.3 }}</td>
+            <td>{{ pedido.4 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Información del cliente</h4>
+<table class="table table-striped">
+    <thead class="table-light">
+        <tr>
+            <td>ID</td>
+            <td>Nombre</td>
+            <td>Dirección</td>
+            <td>Saldo actual</td>
+            <td>Saldo límite</td>
+            <td>Descuento</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ cliente.0 }}</td>
+            <td>{{ cliente.1 }}</td>
+            <td>{{ cliente.2 }}</td>
+            <td>${{ cliente.3 }}</td>
+            <td>${{ cliente.4 }}</td>
+            <td>${{ cliente.5 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h4>Artículos del pedido</h4>
+<table class='table table-striped'>
+    <thead class="table-light">
+        <tr>
+            <td>ID articulo</td>
+            <td>ID fabrica</td>
+            <td>Nombre</td>
+            <td>Precio</td>
+            <td>Usted pidió</td>
+            <td>Descripción</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for articulo in articulos %}
+            <tr>
+                <td>{{ articulo.0 }}</td>
+                <td>{{ articulo.1 }}</td>
+                <td>{{ articulo.2 }}</td>
+                <td>${{ articulo.3 }}</td>
+                <td>{{ articulo.4 }}</td>
+                <td>{{ articulo.5 }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

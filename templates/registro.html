@@ -8,6 +8,17 @@
 <h4>Llene los campos</h4>
 <span>o <a href="login">Ingresa a tu cuenta</a></span>
 
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <form action="registro" method="POST">
     <input type="text" name="nombre" placeholder="Nombre completo" required><br>
     <input type="text" name="user" placeholder="Nombre de usuario" required><br>

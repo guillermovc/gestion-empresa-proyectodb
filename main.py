@@ -10,10 +10,7 @@ from rutas_clientes import clientes
 from rutas_fabricas import fabricas
 from rutas_pedidos import pedidos
 
-
-
 app = Flask(__name__)
-
 
 # ===================================== DATABASE =====================================
 app.config['MYSQL_HOST'] = 'localhost'
@@ -192,10 +189,7 @@ def login() -> 'html':
 # """"""""""""""""""""""""""""" Ruta cerrar sesion """""""""""""""""""""""""""""
 @app.route('/logout')
 def logout():
-    session.clear()
-    return redirect(url_for('index'))
 
-# ==================================== FIN RUTAS ======================================
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)

@@ -342,7 +342,9 @@ def eliminar_cliente(id):
 # """"""""""""""""""""""""""""" Ruta registrar fábrica """""""""""""""""""""""""""""
 @app.route('/registrar_fabrica', methods=['GET', 'POST'])
 def registrar_fabrica() -> 'html':
+    usuario = None
     if 'usuario' in session:
+        usuario = session['nombre']
         if request.method == 'POST':            
             nombre      = request.form['nombre']
             telefono    = request.form['telefono']
@@ -360,7 +362,8 @@ def registrar_fabrica() -> 'html':
 
             flash('Fábrica registrada correctamente.')
 
-        return render_template('registrar_fabrica.html')
+        return render_template('registrar_fabrica.html',
+                                usuario = usuario)
 
     else:
         return redirect(url_for('index'))

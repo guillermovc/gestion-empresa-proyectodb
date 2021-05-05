@@ -1,3 +1,5 @@
+# Hecho por: Juan Hernandez
+
 import flask
 from flask import render_template, request, redirect, url_for, flash, session
 
@@ -11,7 +13,6 @@ def registrar_articulo() -> 'html':
     if 'usuario' in session:
         fabricas = None
         if request.method == 'POST':
-            
             nombre = request.form['nombre']
             precio = float(request.form['precio'])
             existencias = float(request.form['existencias'])
@@ -22,7 +23,8 @@ def registrar_articulo() -> 'html':
                         (nombre, precio, existencias, descripcion, ID_fabrica))
             mysql.connection.commit()
             flash('Articulo registrado correctamente')
-            return render_template('registrar_articulo.html')
+            return render_template('registrar_articulo.html', usuario=session['nombre'])
+
         else:
             cur = mysql.connection.cursor()
             cur.execute('SELECT * FROM fabricas')
@@ -43,8 +45,17 @@ def editar_articulo(id):
         data = cur.fetchall()
         cur.execute(f'SELECT * FROM fabricas')
         fabricas = cur.fetchall()
+
+        cur.execute("""SELECT fabricas.nombre
+                        FROM fabricas 
+                        INNER JOIN articulos ON articulos.fabrica_id=fabricas.id 
+                        WHERE articulos.id=%s""", [id])
+        fabrica_actual = cur.fetchall()[0][0]
+        # print(f'Fabrica actual: {fabrica_actual}')
+
         return render_template('editar_articulo.html', 
-        articulo = data[0], fabricas=fabricas,usuario=session['nombre'])
+        articulo = data[0], fabrica_actual=fabrica_actual,
+        fabricas=fabricas,usuario=session['nombre'])
     
     else:
         return redirect(url_for('index'))
@@ -82,5 +93,5 @@ def eliminar_articulo(id):
         cur = mysql.connection.cursor()
         cur.execute(f'DELETE FROM articulos WHERE id = {id}')
         mysql.connection.commit()
-        flash('El cliente ha sido eliminado.')
+        flash('El artículo ha sido eliminado.')
     return redirect(url_for('index'))

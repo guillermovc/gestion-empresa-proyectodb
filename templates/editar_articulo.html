@@ -34,7 +34,11 @@
     <label for="fabrica">Fábrica</label><br>
     <select name="fabrica" id=fabrica><br>
         {% for fabrica in fabricas %}
-        <option value="{{ fabrica.0 }}">{{ fabrica.1 }}</option>
+        <option value="{{ fabrica.0 }}"
+        {% if fabrica.1 == fabrica_actual %}
+        selected
+        {% endif %}
+        >{{ fabrica.1 }}</option>
         {% endfor %}
     </select>
     

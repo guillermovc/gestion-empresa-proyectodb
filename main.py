@@ -1,3 +1,5 @@
+# Hecho por: Guillermo Velazquez
+
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import LoginManager, UserMixin
 import bcrypt

@@ -1,10 +1,11 @@
+# Hecho por: Juan Hernandez
+
 import flask
 from flask import render_template, request, redirect, url_for, flash, session
 
 from database import mysql
 
 fabricas = flask.Blueprint('fabricas', __name__)
-
 
 # """"""""""""""""""""""""""""" Ruta registrar fábrica """""""""""""""""""""""""""""
 @fabricas.route('/registrar_fabrica', methods=['GET', 'POST'])
@@ -70,4 +71,15 @@ def actualizar_fabrica(id):
         """, (nombre, telefono, direccion, ciudad, es_alternativa, id))
         mysql.connection.commit()
         flash('Los cambios se aplicaron correctamente.')
+    return redirect(url_for('index'))
+
+
+# """"""""""""""""""""""""""""" Ruta eliminar cliente """""""""""""""""""""""""""""
+@fabricas.route('/eliminar_fabrica/<string:id>')
+def eliminar_fabrica(id):
+    if 'usuario' in session:
+        cur = mysql.connection.cursor()
+        cur.execute(f'DELETE FROM fabricas WHERE id = {id}')
+        mysql.connection.commit()
+        flash('La fábrica ha sido eliminado.')
     return redirect(url_for('index'))

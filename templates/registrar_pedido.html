@@ -5,7 +5,10 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-            <p>{{ message }}</p>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         {% endfor %}
     {% endif %}
 {% endwith %}
@@ -29,7 +32,7 @@
                     <p class="card-text">{{articulo.5}}</p>
                     <p>Agregue un articulo ingresando la cantidad deseada.</p>
                     <label for="cantidad_articulo_{{articulo.0}}">Cantidad</label>
-                    <input type="number" name="cantidad_articulo_{{articulo.0}}" id="cantidad_articulo_{{articulo.0}}" value=0>
+                    <input type="number" min="0" name="cantidad_articulo_{{articulo.0}}" id="cantidad_articulo_{{articulo.0}}" value=0>
                 </div>
             </div>
         </div>

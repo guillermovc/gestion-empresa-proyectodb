@@ -1,3 +1,5 @@
+# Hecho por: Guillermo Velazquez
+
 import flask
 from flask import render_template, request, redirect, url_for, flash, session
 
@@ -64,7 +66,7 @@ def registrar_pedido() -> 'html':
                             # Informamos al usuario que su solicitud no pudo ser procesada
                             flash("""No hay articulos suficientes para completar su pedido.
                                     Verifique los campos e intentelo de nuevo.""")
-                            return redirect(url_for('registrar_pedido'))
+                            return redirect(url_for('pedidos.registrar_pedido'))
 
 
             total_cuenta = 0
